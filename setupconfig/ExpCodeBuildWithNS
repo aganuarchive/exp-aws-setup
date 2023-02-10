@@ -1,0 +1,172 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSEXPROLE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "EXP-USER-ROLE"
+        RSCTYPE: "NAME;ARN"
+  EXPCBPROCESSSHOPFILE:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-PROCESSSHOPFILE
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildProcessShopFile.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  REGISTERSHOPFILE:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-REGISTERSHOPFILE
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildRegisterShopFile.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  PROCESSONEFILE:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-PROCESSONEFILE
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildProcessOneFile.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  PROCESSTRNQ:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-PROCESSTRNQ
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildProcessTrnQ.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  GETLOCATIONSMOBILE:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETLOCATIONSMOBILE
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildgetLocationsMobile.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  GETFILTERS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETFILTERS
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildgetFilters.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  APIGETITEM:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETITEM
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildgetItem.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  APIUPDATEITEM:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-UPDATEITEM
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildupdateItem.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  APIGETITEMSHOPRATES:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETITEMSHOPRATES
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildgetItemShopRates.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB

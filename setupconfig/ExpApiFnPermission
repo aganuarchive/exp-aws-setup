@@ -1,0 +1,120 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources : 
+  NSAPIRESFILTERSLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-FILTERS"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSFILTERSLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-FILTERS-LAMBDA"
+        RSCTYPE: "NAME"
+  GETFILTERSPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSFILTERSLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESFILTERSLAMBDA.Outputs.RSCARN
+##########Setup for locations
+  NSAPIRESLOCSLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-LOCATIONS"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSLOCSLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-LOCATIONS-LAMBDA"
+        RSCTYPE: "NAME"
+  GETLOCATIONSPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSLOCSLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESLOCSLAMBDA.Outputs.RSCARN
+
+##########Setup for item shop rates
+  NSAPIRESSHOPRATESLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-SHOPRATES"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSSHOPRATESLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-SHOPRATES-LAMBDA"
+        RSCTYPE: "NAME"
+  GETSHOPRATESPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSSHOPRATESLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESSHOPRATESLAMBDA.Outputs.RSCARN
+
+##########Setup for item 
+  NSAPIRESITEMLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-ITEM"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSITEMLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-ITEM-LAMBDA"
+        RSCTYPE: "NAME"
+  GETITEMPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSITEMLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESITEMLAMBDA.Outputs.RSCARN
+
+##########Setup for items 
+  NSAPIRESITEMSLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-ITEMS"
+        RSCTYPE: "NAME;ARN;URI-POST"
+        RSCKEY2: "RESTAPI"
+  NSITEMSLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "API-RES-ITEMS-LAMBDA"
+        RSCTYPE: "NAME"
+  GETITEMSPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSITEMSLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESITEMSLAMBDA.Outputs.RSCARN

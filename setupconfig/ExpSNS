@@ -1,0 +1,45 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources : 
+  NSTOPIC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "SNS-CB-QUEUE-TOPIC"
+        RSCTYPE: "NAME"
+  NSTOPICEMAIL:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "SNS-CB-EMAIL"
+        RSCTYPE: "NAME"
+  NSTOPICQUE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "EXP-CB-QUEUE"
+        RSCTYPE: "NAME;ARN"
+  NSTOPICEMAILADDR:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "SNS-CB-EMAIL-ADDR"
+        RSCTYPE: "NAME"
+  CODEBUILDTOPIC : 
+    Type : AWS::SNS::Topic
+    Properties:
+      TopicName : !GetAtt NSTOPIC.Outputs.RSCID
+      Subscription :
+        - Endpoint : !GetAtt NSTOPICQUE.Outputs.RSCARN
+          Protocol : sqs
+  CODEBUILDTOPICEMAIL : 
+    Type : AWS::SNS::Topic
+    Properties:
+      TopicName : !GetAtt NSTOPICEMAIL.Outputs.RSCID
+      Subscription :
+        - Endpoint : !GetAtt NSTOPICEMAILADDR.Outputs.RSCID
+          Protocol : email

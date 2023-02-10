@@ -1,0 +1,91 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources : 
+  TRNHEADER : 
+    Type : AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions: 
+        - 
+          AttributeName: "FIELDTAG"
+          AttributeType: "S"
+        - 
+          AttributeName: "FIELDNAME"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "FIELDTAG"
+          KeyType: "HASH"
+        - 
+          AttributeName: "FIELDNAME"
+          KeyType: "RANGE"
+      TableName : "TRN-HEADER-FIELDS"
+      BillingMode: PAY_PER_REQUEST
+  TRNLINES : 
+    Type : AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions: 
+        - 
+          AttributeName: "FIELDTAG"
+          AttributeType: "S"
+        - 
+          AttributeName: "FIELDNAME"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "FIELDTAG"
+          KeyType: "HASH"
+        - 
+          AttributeName: "FIELDNAME"
+          KeyType: "RANGE"
+      TableName : "TRN-LINES-FIELDS"
+      BillingMode: PAY_PER_REQUEST	  
+  SHOPFILETRNS : 
+    Type : AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions: 
+        - 
+          AttributeName: "SHOPFILENAME"
+          AttributeType: "S"
+        - 
+          AttributeName: "FILESTATUS"
+          AttributeType: "N"
+      KeySchema: 
+        - 
+          AttributeName: "SHOPFILENAME"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        -
+          IndexName: "FILESTATUS-index"
+          KeySchema: 
+            -  
+              AttributeName: "FILESTATUS"
+              KeyType: "HASH"
+          Projection:
+              ProjectionType : "ALL"
+      TableName : "SHOP-FILE-TRNS"
+      BillingMode: PAY_PER_REQUEST	  
+  RESTABLE : 
+    Type : AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions: 
+        - 
+          AttributeName: "RESKEY"
+          AttributeType: "S"
+        - 
+          AttributeName: "RESNAME"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "RESKEY"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        -
+          IndexName: "RESNAME-index"
+          KeySchema: 
+            -  
+              AttributeName: "RESNAME"
+              KeyType: "HASH"
+          Projection:
+              ProjectionType : "ALL"
+      TableName : "RESTABLE"
+      BillingMode: PAY_PER_REQUEST	  

@@ -1,0 +1,41 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSEXPQUEUE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "EXP-SHOP-QUEUE"
+        RSCTYPE: "NAME"
+  NSCBQUEUE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "EXP-CB-QUEUE"
+        RSCTYPE: "NAME"
+  EXPQUEUE:
+    Type: AWS::SQS::Queue
+    Properties:   
+      QueueName : !GetAtt NSEXPQUEUE.Outputs.RSCID
+      FifoQueue : true
+  CBQUEUE:
+    Type: AWS::SQS::Queue
+    Properties:   
+      QueueName : !GetAtt NSCBQUEUE.Outputs.RSCID
+  EXPQUEUEPOLICY:
+    Type: AWS::SQS::QueuePolicy
+    Properties: 
+      Queues: 
+        - !Ref EXPQUEUE
+        - !Ref CBQUEUE
+      PolicyDocument: 
+        Statement: 
+          - 
+            Action: 
+              - "SQS:SendMessage" 
+              - "SQS:ReceiveMessage"
+            Effect: "Allow"
+            Resource: "*"
+            Principal:  "*"

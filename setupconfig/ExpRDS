@@ -1,0 +1,13 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources : 
+  MYSQLDB : 
+    Type : AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass : db.t3.micro
+      DBName : expdp2
+      Engine : mysql
+      EngineVersion : 8.0
+      MasterUsername : admin
+      MasterUserPassword : ramrao11
+      AllocatedStorage : 10

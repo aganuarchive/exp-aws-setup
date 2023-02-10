@@ -1,0 +1,59 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  EXPCBLAMBDALAYERS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-LAMBDALAYERS
+      ServiceRole: 
+          Fn::ImportValue:
+            ROLEARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildspecLambdaLayers.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  EXPCBUPDATEFNLAYERS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-UPDATEFNLAYERS
+      ServiceRole: "arn:aws:iam::346925588329:role/ExpUserRole"
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildUpdateFnLayers.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CUSTOMFNSNS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-CUSTOMFNSNS
+      ServiceRole: "arn:aws:iam::346925588329:role/ExpUserRole"
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildCustomFnSNS.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB

@@ -1,0 +1,59 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSRSCINFO:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "SNS-CB-QUEUE-TOPIC"
+        RSCTYPE: "NAME;ARN"
+  NSEvtBrgCBExec:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "EB-CB-EXEC-EMAIL"
+        RSCTYPE: "NAME"
+  NSEXPROLE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "EXP-USER-ROLE"
+        RSCTYPE: "NAME;ARN"
+  NSPROCESSONEFILE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "FN-PROCESSONEFILE"
+        RSCTYPE: "NAME;ARN"
+  EXPRUNPROCESSONEFILE:
+    Type: AWS::Scheduler::Schedule
+    Properties:   
+      Name : exp-run-process-one-file
+      FlexibleTimeWindow:
+        Mode : "OFF"
+      ScheduleExpression : rate(3 minutes)
+      Target:
+        Arn : !GetAtt NSPROCESSONEFILE.Outputs.RSCARN
+        RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+  EXPCODEBUILDEXEC2:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : !GetAtt NSEvtBrgCBExec.Outputs.RSCID
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      EventPattern:
+        source:
+          - aws.codebuild
+        detail-type:
+          - CodeBuild Build State Change
+        detail:
+          build-status:
+            - SUCCEEDED
+            - FAILED
+      Targets:
+        - Id : !GetAtt NSRSCINFO.Outputs.RSCID
+          Arn: !GetAtt NSRSCINFO.Outputs.RSCARN
+          

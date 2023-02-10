@@ -1,0 +1,145 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSEXPROLE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "EXP-USER-ROLE"
+        RSCTYPE: "NAME;ARN"
+  processShopFile:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: processShopFile
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Handler: lambda_processShopFile.lambda_handler
+      Timeout : 300
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from processShopFile')
+  REGISTERSHOPFILE:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: registerShopFile
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_registerShopFile.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from registerShopFile')			 
+  PROCESSONEFILE:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: processOneFile
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_processOneFile.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from processOneFile')			 
+  PROCESSTRNQ:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: processTrnQ
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_processTrnQ.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from processTrnQ')			 
+  GETLOCATIONSMOBILE:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: getLocationsMobile
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getLocations.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from getLocationsMobile')			 
+  GETFILTERS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: getFilters
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getFilters.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from getFilters')			 
+  APIGETITEM:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: api_getItem
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getItem.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from api_getItem')			 
+  APIUPDATEITEM:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: api_updateItem
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_processItem.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from api_updateItem')			 
+  APIGETITEMSHOPRATES:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: getItemShopRates
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getItemShopRates.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from getItemShopRates')			 

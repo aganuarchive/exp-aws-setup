@@ -1,0 +1,44 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  BUCKETNAME :
+    Type: String
+    Description: "Bucket name"
+Resources:
+  NSREGISTERSHOPFILE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "FN-REGISTERSHOPFILE"
+        RSCTYPE: "NAME;ARN"
+  MYBUCKET4 : 
+    Type : "AWS::S3::Bucket"
+    Properties : 
+      BucketName : !Ref BUCKETNAME
+      NotificationConfiguration:
+        LambdaConfigurations:
+           -  Event: "s3:ObjectCreated:*"
+              Function : !GetAtt NSREGISTERSHOPFILE.Outputs.RSCARN
+  MYBUCKETPOLICY:
+    Type : "AWS::S3::BucketPolicy"
+    DependsOn : MYBUCKET4
+    Properties:
+      Bucket: !Ref BUCKETNAME
+      PolicyDocument:
+        Version : 2012-10-17
+        Statement:
+          - Effect : Allow
+            Action: 
+              - S3:*
+            Resource:
+              - Fn::Join: ["" , [ "arn:aws:s3:::",!Ref BUCKETNAME, "/*"]]
+              - Fn::Join: ["" , [ "arn:aws:s3:::", !Ref BUCKETNAME]]
+            Principal: "*"  
+  S3INVOKEPERM:
+    Type : "AWS::Lambda::Permission"
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSREGISTERSHOPFILE.Outputs.RSCARN
+      Principal : s3.amazonaws.com
+      SourceArn : !Join ["" , [ "arn:aws:s3:::", !Ref BUCKETNAME]]

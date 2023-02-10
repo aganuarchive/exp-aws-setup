@@ -1,0 +1,91 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  EXPUSERROLE:
+    Type : "AWS::IAM::Role"
+    Properties:
+      RoleName : "ExpUserRole"
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+                - "codebuild.amazonaws.com"
+                - "events.amazonaws.com"
+                - "scheduler.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+  EXPUPDATELAMBDAPOLICY:
+    Type : "AWS::IAM::ManagedPolicy"
+    Properties:
+      ManagedPolicyName : "ExpUpdateLambda"
+      PolicyDocument:
+             Version: "2012-10-17"
+             Statement:
+               - Effect: "Allow"
+                 Action:
+                   - "lambda:CreateFunction"
+                   - "lambda:InvokeFunction"
+                   - "lambda:GetFunction"
+                   - "lambda:ListFunctions"
+                   - "lambda:UpdateFunctionCode"
+                   - "lambda:PublishLayerVersion"
+                   - "lambda:UpdateFunctionConfiguration"
+                   - "lambda:GetFunctionConfiguration"
+                   - "lambda:GetLayerVersion"
+                   - "lambda:ListLayerVersions"
+                   - "lambda:ListLayers"
+                   - "lambda:ListTags"
+                   - "iam:PassRole"
+                   - "iam:GetRole"
+                   - "dynamodb:PutItem"
+                   - "dynamodb:GetItem"
+                   - "dynamodb:UpdateItem"
+                   - "dynamodb:Query"
+                   - "sqs:DeleteMessage"
+                   - "sqs:GetQueueUrl"
+                   - "sqs:GetQueueAttributes"
+				   - "sns:ListTopics"
+				   - "apigateway:GET"
+                 Resource: "*"
+      Roles:
+        - !Ref EXPUSERROLE
+  EXPCODEBUILDPOLICY:
+    Type : "AWS::IAM::ManagedPolicy"
+    Properties:
+      ManagedPolicyName : "ExpCodeBuild"
+      PolicyDocument:
+        Version : "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Resource: "*"
+            Action: 
+               - logs:CreateLogGroup
+               - logs:CreateLogStream
+               - logs:PutLogEvents
+          - Effect: "Allow"
+            Resource: "*"
+            Action: 
+              - s3:PutObject
+              - s3:GetObject
+              - s3:GetObjectVersion
+              - s3:GetBucketAcl
+              - s3:GetBucketLocation
+          - Effect: "Allow"
+            Action: 
+              - codebuild:StartBuild
+              - codebuild:CreateReportGroup
+              - codebuild:CreateReport
+              - codebuild:UpdateReport
+              - codebuild:BatchPutTestCases
+              - codebuild:BatchPutCodeCoverages
+            Resource: "*"
+      Roles:
+        - !Ref EXPUSERROLE
+Outputs:
+   RoleArn:
+     Value : !GetAtt EXPUSERROLE.Arn
+     Export:
+       Name : ROLEARN

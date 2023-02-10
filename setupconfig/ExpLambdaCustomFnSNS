@@ -1,0 +1,37 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  CUSTOMFNSNS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: customFnSNS
+      Role : 
+          Fn::ImportValue:
+            ROLEARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_customFnSNS.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from customFnSNS')			 
+  UPDATEFNLAYERS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: updateFnLayers
+      Role : 
+          Fn::ImportValue:
+            ROLEARN
+      Runtime: python3.9
+      Handler: lambda_updateFnLayers.lambda_handler
+      Timeout : 300
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from updateFnLayers')
