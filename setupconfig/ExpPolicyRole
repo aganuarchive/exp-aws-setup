@@ -47,8 +47,8 @@ Resources:
                    - "sqs:DeleteMessage"
                    - "sqs:GetQueueUrl"
                    - "sqs:GetQueueAttributes"
-				   - "sns:ListTopics"
-				   - "apigateway:GET"
+                   - "sns:ListTopics"
+                   - "apigateway:GET"
                  Resource: "*"
       Roles:
         - !Ref EXPUSERROLE
