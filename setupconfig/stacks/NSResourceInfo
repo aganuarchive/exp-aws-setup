@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  RSCKEY:
+    Type: String
+  RSCTYPE:
+    Type: String
+  RSCKEY2:
+    Type: String
+    Default : "NA"
+Resources:
+  CustomFSxResource:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken: !Join ["", ["arn:aws:lambda:",{Ref: "AWS::Region"}, ":", {Ref: "AWS::AccountId"}, ":function:customFnSNS" ]]
+      ResourceRef : !Ref RSCKEY
+      TypeInfo : !Ref RSCTYPE
+      ResourceRef2 : !Ref RSCKEY2
+Outputs:
+  RSCARN:
+    Description: Resource ARN.
+    Value: !GetAtt 'CustomFSxResource.RSCARN'
+  RSCID:
+    Description: Resource ID or name
+    Value: !GetAtt 'CustomFSxResource.RSCID'
+  RSCURI:
+    Description: Resource URI
+    Value: !GetAtt 'CustomFSxResource.RSCURI'

@@ -32,7 +32,9 @@ Resources:
         ImagePullCredentialsType: CODEBUILD
         Type: LINUX_CONTAINER
       Name: CB-UPDATEFNLAYERS
-      ServiceRole: "arn:aws:iam::346925588329:role/ExpUserRole"
+      ServiceRole: 
+          Fn::ImportValue:
+            ROLEARN
       Source:
         Auth:
           Type: OAUTH
@@ -50,7 +52,9 @@ Resources:
         ImagePullCredentialsType: CODEBUILD
         Type: LINUX_CONTAINER
       Name: CB-CUSTOMFNSNS
-      ServiceRole: "arn:aws:iam::346925588329:role/ExpUserRole"
+      ServiceRole: 
+          Fn::ImportValue:
+            ROLEARN
       Source:
         Auth:
           Type: OAUTH
