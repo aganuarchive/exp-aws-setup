@@ -14,8 +14,6 @@ def processData(data):
 def processTableData(tablename, data):
 #    tablename = data['Dynamodb'][0]['Table']
     records = data
-    #dynamodb = boto3.resource('dynamodb', aws_access_key_id='AKIAVBRTAL5UYA7MKFVH',
-    #                      aws_secret_access_key='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', region_name='us-east-1')
     dynamodb = boto3.resource('dynamodb')
 
     for rec in records :
@@ -47,3 +45,11 @@ if __name__ == '__main__':
     f = open('C:\Abhay\Personal\AWS\AbgSept2022\Scripts\DynamoDB-table-data.json')
     data = json.load(f)
     processData(data['Dynamodb'])
+
+def updateDBEndpoint():
+    rds = boto3.client('rds')
+    dbs = rds.describe_db_instances()
+    print(dbs['DBInstances'][0]['Endpoint']['Address'])
+    dynamodb = boto3.resource('dynamodb')
+    l_table = dynamodb.Table("RESTABLE")
+    l_table.put_item(Item={"RESKEY": "DBURL", "RESNAME": dbs['DBInstances'][0]['Endpoint']['Address'], "RESTYPE": "RDS"})
