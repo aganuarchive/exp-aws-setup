@@ -4,9 +4,16 @@ Resources:
   NSEXPROLE:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
       Parameters:
         RSCKEY: "EXP-USER-ROLE"
+        RSCTYPE: "NAME;ARN"
+  NSCBQUEUE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "EXP-CB-QUEUE"
         RSCTYPE: "NAME;ARN"
   processShopFile:
     Type: "AWS::Lambda::Function"
@@ -143,3 +150,24 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getItemShopRates')			 
+  PROCESSCODEBUILD:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: processCodeBuild
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_processCodeBuild.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from processCodeBuild')			 
+  PROCESSCODEBUILDTRIGGER:
+    Type: "AWS::Lambda::EventSourceMapping"
+    Properties:
+      BatchSize : 1
+      EventSourceArn : !GetAtt NSCBQUEUE.Outputs.RSCARN
+      FunctionName : !Ref PROCESSCODEBUILD

@@ -48,7 +48,13 @@ Resources:
                    - "sqs:GetQueueUrl"
                    - "sqs:GetQueueAttributes"
                    - "sns:ListTopics"
+                   - "sns:Publish"
                    - "apigateway:GET"
+                   - "codebuild:ListBuilds"
+                   - "codebuild:BatchGetBuilds"
+                   - "codebuild:BatchGetProjects"
+                   - "s3:ListAllMyBuckets"
+                   - "s3:ListBucket"
                  Resource: "*"
       Roles:
         - !Ref EXPUSERROLE

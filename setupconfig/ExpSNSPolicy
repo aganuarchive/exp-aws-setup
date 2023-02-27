@@ -1,0 +1,42 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSTOPIC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+      Parameters:
+        RSCKEY: "SNS-CB-QUEUE-TOPIC"
+        RSCTYPE: "NAME;ARN"
+  MYEXPSNSPOLICY:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2008-10-17'
+        Id: EXPSNSPOLICY
+        Statement:
+        - Sid: EXPSNSPOLICY_ID
+          Effect: Allow
+          Principal:
+             AWS: "*"
+          Action:
+          - SNS:GetTopicAttributes
+          - SNS:SetTopicAttributes
+          - SNS:AddPermission
+          - SNS:RemovePermission
+          - SNS:DeleteTopic
+          - SNS:Subscribe
+          - SNS:ListSubscriptionsByTopic
+          - SNS:Publish
+          Resource: !GetAtt NSTOPIC.Outputs.RSCARN
+          Condition:
+            StringEquals:
+              AWS:SourceOwner: !Ref AWS::AccountId
+        - Sid: AWSEvents_EXPSNSPOLICY
+          Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Action: sns:Publish
+          Resource: !GetAtt NSTOPIC.Outputs.RSCARN
+      Topics :
+        - !GetAtt NSTOPIC.Outputs.RSCARN

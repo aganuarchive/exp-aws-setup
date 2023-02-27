@@ -1,5 +1,6 @@
 #Make sure to use spaces and not tabs for indentation
 AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
 Resources:
   CUSTOMFNSNS:
     Type: "AWS::Lambda::Function"
@@ -35,3 +36,27 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from updateFnLayers')
+  FNMACROS3:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: fnMacroS3
+      Runtime: python3.9
+      Role : 
+          Fn::ImportValue:
+            ROLEARN
+      Handler: lambda_fnMacroS3.lambda_handler
+      MemorySize: 128
+      Timeout: 300
+      InlineCode: |
+        def lambda_fnMacroS3.lambda_handler(event, context):
+            response = {
+                'requestId': event['requestId'],
+                'status': 'success'
+            }
+            return response
+  Transform:
+    Type: AWS::CloudFormation::Macro
+    Properties:
+      Name: fnMacroS3
+      Description: Provides the Nested stack template
+      FunctionName: !GetAtt FNMACROS3.Arn

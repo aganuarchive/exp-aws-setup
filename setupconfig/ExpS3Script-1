@@ -1,9 +1,5 @@
 #Make sure to use spaces and not tabs for indentation
 AWSTemplateFormatVersion: "2010-09-09"
-Parameters:
-  BUCKETNAME :
-    Type: String
-    Description: "Bucket name"
 Resources:
   NSREGISTERSHOPFILE:
     Type: AWS::CloudFormation::Stack
@@ -12,15 +8,14 @@ Resources:
       Parameters:
         RSCKEY: "FN-REGISTERSHOPFILE"
         RSCTYPE: "NAME;ARN"
-  MYBUCKET4 : 
-    Type : "AWS::S3::Bucket"
-    Properties : 
-      BucketName : !Ref BUCKETNAME
   MYBUCKETPOLICY:
     Type : "AWS::S3::BucketPolicy"
-    DependsOn : MYBUCKET4
     Properties:
-      Bucket: !Ref BUCKETNAME
+      Bucket: 
+        Fn::Transform:
+          Name: fnMacroS3
+          Parameters :
+            INFOTYPE : 'BUCKETNAME'
       PolicyDocument:
         Version : 2012-10-17
         Statement:
@@ -31,19 +26,21 @@ Resources:
 #              - Fn::Join: ["" , [ "arn:aws:s3:::",!Ref BUCKETNAME, "/*"]]
               - !Join
                   - "" 
-                  - - "arn:aws:s3:::"
-                    - Fn::Transform:
-                        Name : DatetimeNow
+                  - - Fn::Transform:
+                        Name: fnMacroS3
+                        Parameters :
+                          INFOTYPE : 'BUCKETARN'
                     - "/*"
 #              - Fn::Join: ["" , [ "arn:aws:s3:::", !Ref BUCKETNAME]]
-              - !Join
-                  - "" 
-                  - - "arn:aws:s3:::"
-                    - Fn::Transform:
-                        Name : DatetimeNow
-            Principal: "*"  
+              - Fn::Transform:
+                        Name: fnMacroS3
+                        Parameters :
+                          INFOTYPE : 'BUCKETARN'
+            Principal: "*"
   S3INVOKEPERM:
     Type : "AWS::Lambda::Permission"
+    DependsOn:
+      - MYBUCKETPOLICY
     Properties:
       Action : lambda:InvokeFunction
       FunctionName : !GetAtt NSREGISTERSHOPFILE.Outputs.RSCARN
@@ -54,4 +51,6 @@ Resources:
            - "" 
            - - "arn:aws:s3:::"
              - Fn::Transform:
-                  Name : DatetimeNow
+                  Name : fnMacroS3
+                  Parameters :
+                     INFOTYPE : 'BUCKETNAME'
