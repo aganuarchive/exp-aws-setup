@@ -17,6 +17,8 @@ unzip expenseswebapp
 sudo mkdir /opt/tomcat/webapps/expenseswebapp
 sudo cp -rf expenseswebapp/* /opt/tomcat/webapps/expenseswebapp/.
 sudo chown -R tomcat: /opt/tomcat
-sudo export SERVERIP=` dig +short myip.opendns.com @resolver1.opendns.com`
+sudo chmod -R 777 /opt/tomcat/webapps/expenseswebapp
+export SERVERIP=` dig +short myip.opendns.com @resolver1.opendns.com`
 echo "SERVERIP="$SERVERIP >> /opt/tomcat/webapps/expenseswebapp/config.txt
+echo "SERVERPORT=8080" >> /opt/tomcat/webapps/expenseswebapp/config.txt
 sudo systemctl restart tomcat
