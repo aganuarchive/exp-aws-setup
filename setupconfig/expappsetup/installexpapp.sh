@@ -1,7 +1,7 @@
 sudo apt update
 sudo apt install -y openjdk-8-jdk
 sudo mkdir /opt/tomcat
-cd /home/ubuntu/expapp/exp-aws-setup/setupconfig/expappsetup
+cd /home/ubuntu/expapp/setupconfig/expappsetup
 sudo tar xzvf apache-tomcat-8.5.85.tar.gz -C /opt/tomcat --strip-components=1
 sudo groupadd tomcat
 sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
