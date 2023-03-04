@@ -16,9 +16,14 @@ sudo cp host-manager-context.xml /opt/tomcat/webapps/host-manager/META-INF/conte
 unzip expenseswebapp 
 sudo mkdir /opt/tomcat/webapps/expenseswebapp
 sudo cp -rf expenseswebapp/* /opt/tomcat/webapps/expenseswebapp/.
+unzip expngapp 
+sudo mkdir /opt/tomcat/webapps/expngapp
+sudo cp -rf expngapp/* /opt/tomcat/webapps/expngapp/.
 sudo chown -R tomcat: /opt/tomcat
-sudo chmod -R 777 /opt/tomcat/webapps/expenseswebapp
+sudo chmod -R 777 /opt/tomcat/webapps
 export SERVERIP=` dig +short myip.opendns.com @resolver1.opendns.com`
 echo "SERVERIP="$SERVERIP >> /opt/tomcat/webapps/expenseswebapp/config.txt
 echo "SERVERPORT=8080" >> /opt/tomcat/webapps/expenseswebapp/config.txt
+sudo sed -i 's+href="/"+href="/expngapp/"+g' /opt/tomcat/webapps/expngapp/index.html
+source create-fdconfig.sh
 sudo systemctl restart tomcat
