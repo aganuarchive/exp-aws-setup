@@ -1,6 +1,6 @@
 import json
 import boto3
-import exputils
+from boto3.dynamodb.conditions import Key
 
 def processData(data):
     for d in data:
@@ -26,8 +26,6 @@ def processTableData(tablename, data):
 
 def processResTableData(tablename, data):
     records = data
-    #dynamodb = boto3.resource('dynamodb', aws_access_key_id='AKIAVBRTAL5UYA7MKFVH',
-    #                      aws_secret_access_key='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', region_name='us-east-1')
     dynamodb = boto3.resource('dynamodb')
 
     for rec in records :
@@ -53,3 +51,18 @@ def updateDBEndpoint():
     dynamodb = boto3.resource('dynamodb')
     l_table = dynamodb.Table("RESTABLE")
     l_table.put_item(Item={"RESKEY": "DBURL", "RESNAME": dbs['DBInstances'][0]['Endpoint']['Address'], "RESTYPE": "RDS"})
+
+def getApiGatewayID():
+    api = boto3.client('apigateway')
+    dynamo = boto3.resource('dynamodb')
+    l_table = dynamo.Table("RESTABLE")
+    response = l_table.query(KeyConditionExpression=Key('RESKEY').eq("RESTAPI"))
+    print(response['Items'][0]['RESNAME'])
+    apis = api.get_rest_apis()
+    #print(apis)
+    apiid = ""
+    for ap in apis['items']:
+        if (ap['name'] == response['Items'][0]['RESNAME']):
+            print(ap['id'])
+            apiid = ap['id']
+    return apiid
