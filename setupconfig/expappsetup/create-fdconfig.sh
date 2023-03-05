@@ -1,6 +1,6 @@
 export SERVERPORT=8080
 export SERVERIP=`dig +short myip.opendns.com @resolver1.opendns.com`
-export $APIADDR=`python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.getApiGatewayID()"`
+export APIADDR=`python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.getApiGatewayID()"`
 echo '{' > /opt/tomcat/webapps/expngapp/assets/config/fdconfig.json
 echo ' "configparams": [' >> /opt/tomcat/webapps/expngapp/assets/config/fdconfig.json
 echo ' [{"name":"location_get_url"},{"value":"https://'$APIADDR'.execute-api.us-east-1.amazonaws.com/PROD/locations"}],' >> /opt/tomcat/webapps/expngapp/assets/config/fdconfig.json
