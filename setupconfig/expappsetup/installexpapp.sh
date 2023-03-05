@@ -25,5 +25,6 @@ export SERVERIP=` dig +short myip.opendns.com @resolver1.opendns.com`
 echo "SERVERIP="$SERVERIP >> /opt/tomcat/webapps/expenseswebapp/config.txt
 echo "SERVERPORT=8080" >> /opt/tomcat/webapps/expenseswebapp/config.txt
 sudo sed -i 's+href="/"+href="/expngapp/"+g' /opt/tomcat/webapps/expngapp/index.html
+sudo cp /home/ubuntu/expapp/setupconfig/processDynamoDBConfig.py /home/ubuntu/expapp/setupconfig/expappsetup/.
 source create-fdconfig.sh
 sudo systemctl restart tomcat
