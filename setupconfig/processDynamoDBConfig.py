@@ -53,16 +53,15 @@ def updateDBEndpoint():
     l_table.put_item(Item={"RESKEY": "DBURL", "RESNAME": dbs['DBInstances'][0]['Endpoint']['Address'], "RESTYPE": "RDS"})
 
 def getApiGatewayID():
+    #DO NOT KEEP ANY OTHER print() STATEMENTS BECAUSE OUTPUT OF print(apiid) IS ASSGINED IN SHELL CRIPT
     api = boto3.client('apigateway')
     dynamo = boto3.resource('dynamodb')
     l_table = dynamo.Table("RESTABLE")
     response = l_table.query(KeyConditionExpression=Key('RESKEY').eq("RESTAPI"))
-    print(response['Items'][0]['RESNAME'])
     apis = api.get_rest_apis()
-    #print(apis)
     apiid = ""
     for ap in apis['items']:
         if (ap['name'] == response['Items'][0]['RESNAME']):
-            print(ap['id'])
             apiid = ap['id']
+            print(apiid)
     return apiid
