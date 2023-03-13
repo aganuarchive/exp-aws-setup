@@ -4,7 +4,9 @@ Resources :
   NSAPIRESFILTERSLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-FILTERS"
         RSCTYPE: "NAME;ARN;URI-GET"
@@ -12,7 +14,9 @@ Resources :
   NSFILTERSLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-FILTERS-LAMBDA"
         RSCTYPE: "NAME"
@@ -27,7 +31,9 @@ Resources :
   NSAPIRESLOCSLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-LOCATIONS"
         RSCTYPE: "NAME;ARN;URI-GET"
@@ -35,7 +41,9 @@ Resources :
   NSLOCSLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-LOCATIONS-LAMBDA"
         RSCTYPE: "NAME"
@@ -51,7 +59,9 @@ Resources :
   NSAPIRESSHOPRATESLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-SHOPRATES"
         RSCTYPE: "NAME;ARN;URI-GET"
@@ -59,7 +69,9 @@ Resources :
   NSSHOPRATESLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-SHOPRATES-LAMBDA"
         RSCTYPE: "NAME"
@@ -75,7 +87,9 @@ Resources :
   NSAPIRESITEMLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-ITEM"
         RSCTYPE: "NAME;ARN;URI-GET"
@@ -83,7 +97,9 @@ Resources :
   NSITEMLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-ITEM-LAMBDA"
         RSCTYPE: "NAME"
@@ -99,7 +115,9 @@ Resources :
   NSAPIRESITEMSLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-ITEMS"
         RSCTYPE: "NAME;ARN;URI-POST"
@@ -107,7 +125,9 @@ Resources :
   NSITEMSLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-ITEMS-LAMBDA"
         RSCTYPE: "NAME"
@@ -118,3 +138,87 @@ Resources :
       FunctionName : !GetAtt NSITEMSLAMBDA.Outputs.RSCID
       Principal : apigateway.amazonaws.com
       SourceArn : !GetAtt NSAPIRESITEMSLAMBDA.Outputs.RSCARN
+
+##########Setup for categories 
+  NSAPIRESCATLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-CATEGORIES"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSCATLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-CATEGORIES-LAMBDA"
+        RSCTYPE: "NAME"
+  GETCATPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSCATLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESCATLAMBDA.Outputs.RSCARN
+
+##########Setup for costcentres 
+  NSAPIRESCCLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-COSTCENTRES"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSCCLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-COSTCENTRES-LAMBDA"
+        RSCTYPE: "NAME"
+  GETCCPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSCCLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESCCLAMBDA.Outputs.RSCARN
+
+##########Setup for subitems 
+  NSAPIRESSILAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-SUBITEMS"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSSILAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-SUBITEMS-LAMBDA"
+        RSCTYPE: "NAME"
+  GETSIPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSSILAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESSILAMBDA.Outputs.RSCARN

@@ -1,0 +1,695 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources : 
+  NSAPI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "RESTAPI"
+        RSCTYPE: "NAME"
+  TESTAPI : 
+    Type : AWS::ApiGateway::RestApi
+    Properties:
+      Name : !GetAtt NSAPI.Outputs.RSCID
+      EndpointConfiguration:
+        Types: 
+          - "REGIONAL"
+##### Setup for item filters
+  NSAPIRES:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-FILTERS"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-FILTERS-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPIR1 : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRES.Outputs.RSCID
+  TESTAPIR1M : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDA.Outputs.RSCARN, "/invocations" ]]
+#		Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getFilters/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE
+  TESTAPIR2M : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1
+      HttpMethod: OPTIONS
+      Integration : 
+#        IntegrationHttpMethod : POST
+        Type : MOCK
+        RequestTemplates:
+           application/json: '{"statusCode":200}'
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDA.Outputs.RSCARN, "/invocations" ]]
+#        Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getFilters/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+
+##### Setup for locations
+  NSAPIRESLOC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-LOCATIONS"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDALOC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-LOCATIONS-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPILOC : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRESLOC.Outputs.RSCID
+  TESTAPILOCM : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPILOC
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDALOC.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE
+  TESTAPILOC2M : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPILOC
+      HttpMethod: OPTIONS
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : MOCK
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDALOC.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+##### Setup for item shop rates
+  NSAPIRESSHOPRATE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-SHOPRATES"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDASHOPRATE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-SHOPRATES-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPISHOPRATE : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRESSHOPRATE.Outputs.RSCID
+  TESTAPISHOPRATEM : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPISHOPRATE
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDASHOPRATE.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior : WHEN_NO_TEMPLATES
+        RequestTemplates :
+            "application/json" : "{ \"itemid\": \"$input.params('itemid')\" }"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      RequestParameters :
+          method.request.querystring.itemid : true
+      AuthorizationType : NONE
+  TESTAPISHOPRATE2M : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPISHOPRATE
+      HttpMethod: OPTIONS
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : MOCK
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDASHOPRATE.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+##### Setup for item
+  NSAPIRESITEM:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-ITEM"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDAITEM:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-ITEM-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPIITEM : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRESITEM.Outputs.RSCID
+  TESTAPIITEMM : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIITEM
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAITEM.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior : WHEN_NO_TEMPLATES
+        RequestTemplates :
+            "application/json" : "{ \"itemid\": \"$input.params('itemid')\" }"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      RequestParameters :
+          method.request.querystring.itemid : true
+      AuthorizationType : NONE
+  TESTAPIITEM2M : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIITEM
+      HttpMethod: OPTIONS
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : MOCK
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAITEM.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+##### Setup for items
+  NSAPIRESITEMS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-ITEMS"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDAITEMS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-ITEMS-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPIITEMS : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRESITEMS.Outputs.RSCID
+  TESTAPIITEMMS : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIITEMS
+      HttpMethod: POST
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAITEMS.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior : WHEN_NO_TEMPLATES
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE
+  TESTAPIITEMS2M : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIITEMS
+      HttpMethod: OPTIONS
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : MOCK
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAITEMS.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+##### Setup for item categories
+  NSAPIRESCAT:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-CATEGORIES"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDACAT:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-CATEGORIES-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPIR1CAT : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRESCAT.Outputs.RSCID
+  TESTAPIR1MCAT : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1CAT
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDACAT.Outputs.RSCARN, "/invocations" ]]
+#		Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getCategories/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE
+  TESTAPIR2MCAT : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1CAT
+      HttpMethod: OPTIONS
+      Integration : 
+#        IntegrationHttpMethod : POST
+        Type : MOCK
+        RequestTemplates:
+           application/json: '{"statusCode":200}'
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDACAT.Outputs.RSCARN, "/invocations" ]]
+#        Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getFilters/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+##### Setup for item costcentres
+  NSAPIRESCC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-COSTCENTRES"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDACC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-COSTCENTRES-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPIR1CC : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRESCC.Outputs.RSCID
+  TESTAPIR1MCC : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1CC
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDACC.Outputs.RSCARN, "/invocations" ]]
+#		Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getCategories/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE
+  TESTAPIR2MCC : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1CC
+      HttpMethod: OPTIONS	
+      Integration : 
+#        IntegrationHttpMethod : POST
+        Type : MOCK
+        RequestTemplates:
+           application/json: '{"statusCode":200}'
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDACC.Outputs.RSCARN, "/invocations" ]]
+#        Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getFilters/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+##### Setup for item subitems
+  NSAPIRESSI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-SUBITEMS"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDASI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-SUBITEMS-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPIR1SI : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRESSI.Outputs.RSCID
+  TESTAPIR1MSI : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1SI
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDASI.Outputs.RSCARN, "/invocations" ]]
+#		Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getCategories/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE
+  TESTAPIR2MSI : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1SI
+      HttpMethod: OPTIONS
+      Integration : 
+#        IntegrationHttpMethod : POST
+        Type : MOCK
+        RequestTemplates:
+           application/json: '{"statusCode":200}'
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDASI.Outputs.RSCARN, "/invocations" ]]
+#        Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getFilters/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+############# Deploy
+#  TESTAPIDEPLOYPROD : 
+#    Type : AWS::ApiGateway::Deployment
+#    DependsOn :
+#      - TESTAPIITEMS2M
+#    Properties:
+#      RestApiId: !Ref TESTAPI
+#  TESTAPISTAGEPROD : 
+#    Type : AWS::ApiGateway::Stage
+#    Properties:
+#      RestApiId: !Ref TESTAPI
+#      DeploymentId :  !Ref TESTAPIDEPLOYPROD
+#      StageName: PROD
+#      MethodSettings:
+#        - HttpMethod : '*'
+#          ResourcePath : /*

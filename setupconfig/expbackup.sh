@@ -1,0 +1,2 @@
+mysqldump  --host=expdb.czej2kn4kqc5.us-east-1.rds.amazonaws.com --port=3306 -u admin -pramrao11  --databases ExpensesDB --triggers --routines --events > /home/ubuntu/expbackup/exprdsbackup.sql
+aws s3 cp /home/ubuntu/expbackup/exprdsbackup.sql s3://expjune2022store/expbackup/exprdsbackup.sql

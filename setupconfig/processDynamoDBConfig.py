@@ -40,7 +40,8 @@ def processResTableData(tablename, data):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    f = open('C:\Abhay\Personal\AWS\AbgSept2022\Scripts\DynamoDB-table-data.json')
+#    f = open('C:\Abhay\Personal\AWS\AbgSept2022\Scripts\DynamoDB-table-data.json')
+    f = open('DynamoDB-table-data.json')
     data = json.load(f)
     processData(data['Dynamodb'])
 

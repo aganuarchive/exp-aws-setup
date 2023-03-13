@@ -4,14 +4,18 @@ Resources:
   NSEXPQUEUE:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "EXP-SHOP-QUEUE"
         RSCTYPE: "NAME"
   NSCBQUEUE:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "EXP-CB-QUEUE"
         RSCTYPE: "NAME"
@@ -19,11 +23,13 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:   
       QueueName : !GetAtt NSEXPQUEUE.Outputs.RSCID
-      FifoQueue : true
+      FifoQueue : true 
+      VisibilityTimeout : 300
   CBQUEUE:
     Type: AWS::SQS::Queue
     Properties:   
       QueueName : !GetAtt NSCBQUEUE.Outputs.RSCID
+      VisibilityTimeout : 300
   EXPQUEUEPOLICY:
     Type: AWS::SQS::QueuePolicy
     Properties: 

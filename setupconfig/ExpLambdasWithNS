@@ -4,14 +4,19 @@ Resources:
   NSEXPROLE:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+#      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "EXP-USER-ROLE"
         RSCTYPE: "NAME;ARN"
   NSCBQUEUE:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "EXP-CB-QUEUE"
         RSCTYPE: "NAME;ARN"
@@ -171,3 +176,48 @@ Resources:
       BatchSize : 1
       EventSourceArn : !GetAtt NSCBQUEUE.Outputs.RSCARN
       FunctionName : !Ref PROCESSCODEBUILD
+  GETCATEGORIES:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: getCategories
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getCategories.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from getCategories')			 
+  GETCOSTCENTRES:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: getCostcentres
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getCostcentres.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from getCostcentres')			 
+  GETSUBITEMS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: getSubitems
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getSubitems.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from getSubitems')			 

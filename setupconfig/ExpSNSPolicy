@@ -4,7 +4,9 @@ Resources:
   NSTOPIC:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "SNS-CB-QUEUE-TOPIC"
         RSCTYPE: "NAME;ARN"

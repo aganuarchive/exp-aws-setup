@@ -4,28 +4,36 @@ Resources :
   NSTOPIC:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "SNS-CB-QUEUE-TOPIC"
         RSCTYPE: "NAME"
   NSTOPICEMAIL:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "SNS-CB-EMAIL"
         RSCTYPE: "NAME"
   NSTOPICQUE:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "EXP-CB-QUEUE"
         RSCTYPE: "NAME;ARN"
   NSTOPICEMAILADDR:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expdec2022store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "SNS-CB-EMAIL-ADDR"
         RSCTYPE: "NAME"

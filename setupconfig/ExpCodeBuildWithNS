@@ -4,7 +4,9 @@ Resources:
   NSEXPROLE:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "EXP-USER-ROLE"
         RSCTYPE: "NAME;ARN"
@@ -188,3 +190,59 @@ Resources:
         BuildSpec : "buildProcessCodeBuild.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
+  GETCATEGORIES:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETCATEGORIES
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildgetCategories.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  GETCOSTCENTRES:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETCOSTCENTRES
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildgetCostcentres.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  GETSUBITEMS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETSUBITEMS
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildgetSubitems.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+
+
