@@ -5,4 +5,4 @@ sudo sed -i 's/SET @@GLOBAL.GTID_/-- SET @@GLOBAL.GTID_/g' exprdsbackup.sql
 sudo sed -i 's/SET @@SESSION.SQL_LOG/-- SET @@SESSION.SQL_LOG/g' exprdsbackup.sql
 sudo sed -i "s/DEFINER='admin'@'%'/ /g" exprdsbackup.sql
 EXPORT DBURL=`python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.getDBEndpoint()"`
-mysql -h $DBURL-u admin -p < exprdsbackup.sql
+mysql -h $DBURL-u admin -p < /home/ubuntu/expbackup/exprdsbackup.sql
