@@ -45,6 +45,12 @@ if __name__ == '__main__':
     data = json.load(f)
     processData(data['Dynamodb'])
 
+def getDBEndpoint():
+    rds = boto3.client('rds')
+    dbs = rds.describe_db_instances()
+    print(dbs['DBInstances'][0]['Endpoint']['Address'])
+    return dbs['DBInstances'][0]['Endpoint']['Address']
+
 def updateDBEndpoint():
     rds = boto3.client('rds')
     dbs = rds.describe_db_instances()
