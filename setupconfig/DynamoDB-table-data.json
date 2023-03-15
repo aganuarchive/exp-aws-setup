@@ -1,0 +1,56 @@
+{
+  "Dynamodb": [
+    {
+      "Table": "TRN-HEADER-FIELDS",
+      "Data": [
+         {"FIELDTAG":"TRNNO", "FIELDNAME" :"trnno" },
+         {"FIELDTAG":"TRNDATE", "FIELDNAME" :"trndate" },
+         {"FIELDTAG":"SHOPDISCOUNT", "FIELDNAME" :"shopdiscount" },
+         {"FIELDTAG":"SHOPAMOUNT", "FIELDNAME" :"shopamount" },
+         {"FIELDTAG":"FILENAME", "FIELDNAME" :"filename" },
+         {"FIELDTAG":"LOCATION", "FIELDNAME" :"location" }
+      ]
+    },
+    {
+      "Table": "TRN-LINES-FIELDS",
+      "Data": [
+         {"FIELDTAG":"ITEMCODE", "FIELDNAME" :"itemcode" },
+         {"FIELDTAG":"ORDERNO", "FIELDNAME" :"orderno" }
+      ]
+    },
+    {
+      "Table": "RESTABLE",
+      "Data": [
+         {"RESKEY":"SNS-CB-EMAIL", "RESNAME" :"expcodebuildemail2", "RESTYPE":"SNS" },
+         {"RESKEY":"SNS-CB-QUEUE-TOPIC", "RESNAME" :"expcodebuildtopic2", "RESTYPE":"SNS" },
+         {"RESKEY":"SNS-CB-EMAIL-ADDR", "RESNAME" :"abhayg04@gmail.com", "RESTYPE":"EMAIL" },
+         {"RESKEY":"EB-CB-EXEC-EMAIL", "RESNAME" :"exp-code_build-exec", "RESTYPE":"EVTBRG" },
+         {"RESKEY":"EB-RUN-PROCESS-ONE-FILE", "RESNAME" :"exp-run-process-one-file", "RESTYPE":"EVTBRG" },
+         {"RESKEY":"EXP-CB-QUEUE", "RESNAME" :"expcodebuildque", "RESTYPE":"SQS" },
+         {"RESKEY":"EXP-SHOP-QUEUE", "RESNAME" :"expqueue.fifo", "RESTYPE":"SQS" },
+         {"RESKEY":"EXP-USER-ROLE", "RESNAME" :"ExpUserRole", "RESTYPE":"IAM" },
+         {"RESKEY":"FN-PROCESSONEFILE", "RESNAME" :"processOneFile", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"FN-REGISTERSHOPFILE", "RESNAME" :"registerShopFile", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"RESTAPI", "RESNAME" :"testapi", "RESTYPE":"RESTAPI" },
+         {"RESKEY":"API-RES-FILTERS", "RESNAME" :"filters", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-LOCATIONS", "RESNAME" :"locations", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-SHOPRATES", "RESNAME" :"itemShopRates", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-ITEM", "RESNAME" :"item", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-ITEMS", "RESNAME" :"items", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-CATEGORIES", "RESNAME" :"categories", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-COSTCENTRES", "RESNAME" :"costcentres", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-SUBITEMS", "RESNAME" :"subitems", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-FILTERS-LAMBDA", "RESNAME" :"getFilters", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-LOCATIONS-LAMBDA", "RESNAME" :"getLocationsMobile", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-SHOPRATES-LAMBDA", "RESNAME" :"getItemShopRates", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-ITEM-LAMBDA", "RESNAME" :"api_getItem", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-ITEMS-LAMBDA", "RESNAME" :"api_updateItem", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-CATEGORIES-LAMBDA", "RESNAME" :"getCategories", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-COSTCENTRES-LAMBDA", "RESNAME" :"getCostcentres", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-SUBITEMS-LAMBDA", "RESNAME" :"getSubitems", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"S3BUCKET", "RESNAME" :"expjan2023store", "RESTYPE":"S3" },
+         {"RESKEY":"DBURL", "RESNAME" :"myexprds-mysqldb-rmzbonc9cn65.cbeuqpdwxuwq.us-east-1.rds.amazonaws.com", "RESTYPE":"RDS" }
+      ]
+    }
+  ]
+}

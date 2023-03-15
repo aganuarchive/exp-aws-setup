@@ -7,6 +7,9 @@ aws cloudformation wait stack-delete-complete --stack-name myexpapi
 aws cloudformation delete-stack --stack-name myexprds  
 aws cloudformation wait stack-delete-complete --stack-name myexprds
 
+aws cloudformation delete-stack --stack-name myexpsnspolicy  
+aws cloudformation wait stack-delete-complete --stack-name myexpsnspolicy
+
 aws cloudformation delete-stack --stack-name myexpscheduler  
 aws cloudformation wait stack-delete-complete --stack-name myexpscheduler
 
