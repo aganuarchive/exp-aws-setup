@@ -17,10 +17,10 @@ aws cloudformation wait stack-create-complete --stack-name mytestdynamo
 python3.8 processDynamoDBConfig.py
 
 
-aws cloudformation create-stack --stack-name myexps3NS --template-body file://./ExpS3Script   --parameters ParameterKey=BUCKETNAME,ParameterValue=expfeb2023store --capabilities CAPABILITY_AUTO_EXPAND
+aws cloudformation create-stack --stack-name myexps3NS --template-body file://./ExpS3Script   --parameters ParameterKey=BUCKETNAME,ParameterValue=$1 --capabilities CAPABILITY_AUTO_EXPAND
 aws cloudformation wait stack-create-complete --stack-name myexps3NS
 
-aws dynamodb put-item --table-name RESTABLE --item "{\"RESKEY\" : { \"S\":\"S3BUCKET\"}, \"RESNAME\" : {\"S\" : \"expfeb2023store\"}, \"RESTYPE\" : {\"S\" : \"S3\"}}"
+aws dynamodb put-item --table-name RESTABLE --item "{\"RESKEY\" : { \"S\":\"S3BUCKET\"}, \"RESNAME\" : {\"S\" : \"$1\"}, \"RESTYPE\" : {\"S\" : \"S3\"}}"
 
 aws cloudformation create-stack --stack-name myexplambdaCustomFnSNS --template-body file://./ExpLambdaCustomFnSNS --capabilities CAPABILITY_AUTO_EXPAND    
 aws cloudformation wait stack-create-complete --stack-name myexplambdaCustomFnSNS
