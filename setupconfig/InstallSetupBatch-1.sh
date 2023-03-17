@@ -1,8 +1,20 @@
 #Run this batch from EC2
+if [ "$1" == "" ]; then
+  echo "NO BUCKET NAME SPECIFIED"
+  exit
+fi
+
+source checkaws
+result=$?
+echo "Result -> "$result
+if [ $result -ne 0 ]; then
+  exit
+fi
+
 aws cloudformation create-stack --stack-name mytestdynamo --template-body file://./ExpDynamoScript  
 aws cloudformation wait stack-create-complete --stack-name mytestdynamo
 
-python processDynamoDBConfig.py
+python3.8 processDynamoDBConfig.py
 
 
 aws cloudformation create-stack --stack-name myexps3NS --template-body file://./ExpS3Script   --parameters ParameterKey=BUCKETNAME,ParameterValue=expfeb2023store --capabilities CAPABILITY_AUTO_EXPAND

@@ -1,0 +1,27 @@
+cd /home/ubuntu/.aws
+export AWSFILE=`ls credentials`
+echo "cred ->"$AWSFILE
+if [ "$AWSFILE" == "" ]; then
+  echo "NO CREDENTIALS FILE"
+  return 1
+else
+  akey=`cat credentials | grep "aws_acc" | cut -d " " -f3`
+  if [ "$akey" == "" ]; then
+    echo "aws key not defined"
+    return 1
+  fi
+fi
+ AWSFILE=`ls conf*` 
+if [ "$AWSFILE" == "" ]; then
+  echo "NO CONFIG FILE"
+  return 1
+else
+  areg=`cat config | grep "region" | cut -d " " -f3`
+  if [ "$areg" == "" ]; then
+    echo "aws region not defined"
+    return 1
+  fi
+
+fi
+cd /home/ubuntu
+return 0

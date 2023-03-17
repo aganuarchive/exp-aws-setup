@@ -28,7 +28,7 @@ aws cloudformation wait stack-create-complete --stack-name myexpscheduler
 aws cloudformation create-stack --stack-name myexprds --template-body file://./ExpRDS    
 aws cloudformation wait stack-create-complete --stack-name myexprds
 
-python -c "import processDynamoDBConfig ; processDynamoDBConfig.updateDBEndpoint()"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.updateDBEndpoint()"
 
 aws cloudformation create-stack --stack-name myexpapi --template-body file://./ExpApi-CORS   --capabilities CAPABILITY_AUTO_EXPAND           
 aws cloudformation wait stack-create-complete --stack-name myexpapi
