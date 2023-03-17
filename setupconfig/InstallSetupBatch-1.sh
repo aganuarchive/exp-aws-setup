@@ -28,6 +28,8 @@ aws cloudformation wait stack-create-complete --stack-name myexplambdaCustomFnSN
 aws cloudformation create-stack --stack-name myexpcodebuild --template-body file://./ExpCodeBuild    
 aws cloudformation wait stack-create-complete --stack-name myexpcodebuild
 
+aws s3 cp stacks s3://$1/stacks --recursive
+
 aws codebuild start-build --project-name CB-LAMBDALAYERS
 aws codebuild start-build --project-name CB-UPDATEFNLAYERS
 aws codebuild start-build --project-name CB-CUSTOMFNSNS
