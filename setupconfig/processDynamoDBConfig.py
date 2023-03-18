@@ -3,7 +3,6 @@ import boto3
 from boto3.dynamodb.conditions import Key
 import time
 
-import exputils.util_codebuild
 
 
 def processData(data):
