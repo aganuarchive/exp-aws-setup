@@ -2,6 +2,9 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Key
 
+import exputils.util_codebuild
+
+
 def processData(data):
     for d in data:
         print(d['Table'])
@@ -72,3 +75,7 @@ def getApiGatewayID():
             apiid = ap['id']
             print(apiid)
     return apiid
+
+def startCodeBuild(buildname):
+    cb = boto3.client('codebuild');
+    exputils.util_codebuild.startBuild(cb, buildname)
