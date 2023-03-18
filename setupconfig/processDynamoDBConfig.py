@@ -1,6 +1,7 @@
 import json
 import boto3
 from boto3.dynamodb.conditions import Key
+import time
 
 import exputils.util_codebuild
 
@@ -76,6 +77,23 @@ def getApiGatewayID():
             print(apiid)
     return apiid
 
-def startCodeBuild(buildname):
+def startCodeBuild(projectname):
     cb = boto3.client('codebuild');
-    exputils.util_codebuild.startBuild(cb, buildname)
+    response = cb.start_build(projectName=projectname)
+    buildid = response['build']['id']
+    print("buildid = " + buildid )
+    buildresult = False
+
+    counter = 0
+    theBuild = ""
+    while (counter < 20):
+        time.sleep(5)
+        counter=counter+1
+        theBuild = cb.batch_get_builds(ids=[buildid])
+        buildStatus = theBuild['builds'][0]['buildStatus']
+        if buildStatus == 'SUCCEEDED':
+            buildresult = True
+            break
+
+    print("build complete")
+    return buildresult
