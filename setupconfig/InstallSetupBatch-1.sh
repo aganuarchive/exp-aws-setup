@@ -33,5 +33,6 @@ aws s3 cp stacks s3://$1/stacks --recursive
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-LAMBDALAYERS')"
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-UPDATEFNLAYERS')"
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-CUSTOMFNSNS')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-FNMACROS3')"
 
 echo "Run the next batch after codebuilds are completed"
