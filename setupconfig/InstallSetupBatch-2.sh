@@ -38,26 +38,29 @@ aws cloudformation wait stack-create-complete --stack-name myexpapifnp
 
 aws lambda invoke --function-name updateFnLayers fn.log
 
-aws codebuild start-build --project-name CB-PROCESSSHOPFILE
-aws codebuild start-build --project-name CB-REGISTERSHOPFILE
-aws codebuild start-build --project-name CB-PROCESSONEFILE
-aws codebuild start-build --project-name CB-PROCESSTRNQ
-aws codebuild start-build --project-name CB-GETLOCATIONSMOBILE
-aws codebuild start-build --project-name CB-GETFILTERS
-aws codebuild start-build --project-name CB-GETITEM
-aws codebuild start-build --project-name CB-UPDATEITEM
-aws codebuild start-build --project-name CB-GETITEMSHOPRATES
-aws codebuild start-build --project-name CB-PROCESSCODEBUILD
-aws codebuild start-build --project-name CB-GETCATEGORIES
-aws codebuild start-build --project-name CB-GETCOSTCENTRES
-aws codebuild start-build --project-name CB-GETSUBITEMS
-aws codebuild start-build --project-name CB-GETITEM
-aws codebuild start-build --project-name CB-GETLOCATIONSMOBILE
-aws codebuild start-build --project-name CB-GETITEMSHOPRATES
-aws codebuild start-build --project-name CB-GETFILTERS
-aws codebuild start-build --project-name CB-UPDATEITEM
-aws codebuild start-build --project-name CB-CATEGORIES
-aws codebuild start-build --project-name CB-COSTCENTRES
-aws codebuild start-build --project-name CB-SUBITEMS
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-LAMBDALAYERS')"
+
+
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-PROCESSSHOPFILE')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-REGISTERSHOPFILE')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-PROCESSONEFILE')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-PROCESSTRNQ')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETLOCATIONSMOBILE')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETFILTERS')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETITEM')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-UPDATEITEM')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETITEMSHOPRATES')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-PROCESSCODEBUILD')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETCATEGORIES')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETCOSTCENTRES')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETSUBITEMS')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETITEM')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETLOCATIONSMOBILE')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETITEMSHOPRATES')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETFILTERS')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-UPDATEITEM')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-CATEGORIES')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-COSTCENTRES')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-SUBITEMS')"
 
 echo "Run the next steps after codebuilds are completed"
