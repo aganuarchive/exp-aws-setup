@@ -1,7 +1,4 @@
 #Run this batch from EC2
-aws lambda invoke --function-name updateFnLayers fn.log
-
-aws s3 cp stacks s3://expfeb2023store/stacks --recursive
 
 aws cloudformation create-stack --stack-name myexpqueue --template-body file://./ExpQueueNS  --capabilities CAPABILITY_AUTO_EXPAND  
 aws cloudformation wait stack-create-complete --stack-name myexpqueue
