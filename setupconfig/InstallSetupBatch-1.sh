@@ -36,6 +36,6 @@ python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuil
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-FNMACROS3')"
 aws lambda invoke --function-name updateFnLayers fn.log
 
-aws s3 cp stacks s3://expfeb2023store/stacks --recursive
+aws s3 cp stacks s3://$1/stacks --recursive
 
 echo "Run the next batch after codebuilds are completed"
