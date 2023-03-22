@@ -9,7 +9,7 @@ aws cloudformation wait stack-create-complete --stack-name myexplambda
 aws cloudformation create-stack --stack-name myexpcodebuildNS --template-body file://./ExpCodeBuildWithNS --capabilities CAPABILITY_AUTO_EXPAND      
 aws cloudformation wait stack-create-complete --stack-name myexpcodebuildNS
 
-aws cloudformation create-stack --stack-name myexps3NS1 --template-body file://./ExpS3Script-1   --capabilities CAPABILITY_AUTO_EXPAND
+aws cloudformation update-stack --stack-name myexps3NS --template-body file://./ExpS3Script-1   --capabilities CAPABILITY_AUTO_EXPAND
 aws cloudformation wait stack-create-complete --stack-name myexps3NS1
 
 

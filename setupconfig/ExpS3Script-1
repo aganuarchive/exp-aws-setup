@@ -4,10 +4,25 @@ Resources:
   NSREGISTERSHOPFILE:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
       Parameters:
         RSCKEY: "FN-REGISTERSHOPFILE"
         RSCTYPE: "NAME;ARN"
+  MYBUCKET4 : 
+    Type : "AWS::S3::Bucket"
+    Properties : 
+#      BucketName : !Ref BUCKETNAME
+      BucketName : 
+        Fn::Transform:
+          Name: fnMacroS3
+          Parameters :
+            INFOTYPE : 'BUCKETNAME'
+      NotificationConfiguration:
+        LambdaConfigurations:
+           -  Event: "s3:ObjectCreated:*"
+              Function : !GetAtt NSREGISTERSHOPFILE.Outputs.RSCARN
   MYBUCKETPOLICY:
     Type : "AWS::S3::BucketPolicy"
     Properties:

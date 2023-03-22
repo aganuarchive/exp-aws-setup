@@ -1,3 +1,7 @@
+if [ "$1" == "" ]; then
+  echo "NO BUCKET NAME SPECIFIED"
+  exit
+fi
 aws cloudformation delete-stack --stack-name myexpapifnp  
 aws cloudformation wait stack-delete-complete --stack-name myexpapifnp 
 
@@ -30,6 +34,11 @@ aws cloudformation wait stack-delete-complete --stack-name myexpcodebuild
 
 aws cloudformation delete-stack --stack-name myexplambdaCustomFnSNS 
 aws cloudformation wait stack-delete-complete --stack-name myexplambdaCustomFnSNS
+
+#aws cloudformation delete-stack --stack-name myexps3NS1  
+#aws cloudformation wait stack-delete-complete --stack-name myexps3NS1
+
+aws s3 rm s3://$1 --recursive
 
 aws cloudformation delete-stack --stack-name myexps3NS  
 aws cloudformation wait stack-delete-complete --stack-name myexps3NS
