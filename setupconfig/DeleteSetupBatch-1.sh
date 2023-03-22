@@ -43,8 +43,8 @@ aws s3 rm s3://$1 --recursive
 aws cloudformation delete-stack --stack-name myexps3NS  
 aws cloudformation wait stack-delete-complete --stack-name myexps3NS
 
-aws cloudformation delete-stack --stack-name mytestdynamo  
-aws cloudformation wait stack-delete-complete --stack-name mytestdynamo
+aws cloudformation delete-stack --stack-name myexpdynamo  
+aws cloudformation wait stack-delete-complete --stack-name myexpdynamo
 
 aws cloudformation delete-stack --stack-name myexprds  
 aws cloudformation wait stack-delete-complete --stack-name myexprds

@@ -11,8 +11,8 @@ if [ $result -ne 0 ]; then
   exit
 fi
 
-aws cloudformation create-stack --stack-name mytestdynamo --template-body file://./ExpDynamoScript  
-aws cloudformation wait stack-create-complete --stack-name mytestdynamo
+aws cloudformation create-stack --stack-name myexpdynamo --template-body file://./ExpDynamoScript  
+aws cloudformation wait stack-create-complete --stack-name myexpdynamo
 
 python3.8 processDynamoDBConfig.py
 
