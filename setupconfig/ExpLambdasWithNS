@@ -221,3 +221,33 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getSubitems')			 
+  GETMTRANS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: getMtrans
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getMtrans.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from getSubitems')			 
+  UPDATEMTRANS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: api_updateMtrans
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_updateMtrans.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from getSubitems')			 
