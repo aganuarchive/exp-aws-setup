@@ -250,3 +250,31 @@ Resources :
       FunctionName : !GetAtt NSMTRANSLAMBDA.Outputs.RSCID
       Principal : apigateway.amazonaws.com
       SourceArn : !GetAtt NSAPIRESMTRANSLAMBDA.Outputs.RSCARN
+
+##########Setup for mtran 
+  NSAPIRESMTRANLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-MTRAN"
+        RSCTYPE: "NAME;ARN;URI-POST"
+        RSCKEY2: "RESTAPI"
+  NSMTRANSLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-MTRAN-LAMBDA"
+        RSCTYPE: "NAME"
+  GETMTRANSPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSMTRANLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESMTRANLAMBDA.Outputs.RSCARN

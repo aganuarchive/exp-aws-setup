@@ -677,6 +677,172 @@ Resources :
               application/json: 'Empty'
       AuthorizationType : NONE	  
 
+##### Setup for item mtrans
+  NSAPIRESMTRANS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-MTRANS"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDAMTRANS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-MTRANS-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPIR1MTRANS : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRESMTRANS.Outputs.RSCID
+  TESTAPIR1MMTRANS : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1MTRANS
+      HttpMethod: POST
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAMTRANS.Outputs.RSCARN, "/invocations" ]]
+#		Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getCategories/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE
+  TESTAPIR2MMTRANS : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1MTRANS
+      HttpMethod: OPTIONS
+      Integration : 
+#        IntegrationHttpMethod : POST
+        Type : MOCK
+        RequestTemplates:
+           application/json: '{"statusCode":200}'
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAMTRANS.Outputs.RSCARN, "/invocations" ]]
+#        Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getFilters/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+##### Setup for item mtran
+  NSAPIRESMTRAN:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-MTRAN"
+        RSCTYPE: "NAME"
+  NSAPIRESGETLAMBDAMTRAN:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-MTRAN-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPIR1MTRAN : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ParentId: !GetAtt 
+        - TESTAPI
+        - RootResourceId
+      PathPart: !GetAtt NSAPIRESMTRAN.Outputs.RSCID
+  TESTAPIR1MMTRAN : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1MTRAN
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAMTRAN.Outputs.RSCARN, "/invocations" ]]
+#		Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getCategories/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE
+  TESTAPIR2MMTRAN : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref TESTAPI
+      ResourceId: !Ref TESTAPIR1MTRAN
+      HttpMethod: OPTIONS
+      Integration : 
+#        IntegrationHttpMethod : POST
+        Type : MOCK
+        RequestTemplates:
+           application/json: '{"statusCode":200}'
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAMTRAN.Outputs.RSCARN, "/invocations" ]]
+#        Uri : arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:346925588329:function:getFilters/invocations 
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
 ############# Deploy
 #  TESTAPIDEPLOYPROD : 
 #    Type : AWS::ApiGateway::Deployment
