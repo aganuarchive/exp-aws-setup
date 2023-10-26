@@ -262,7 +262,7 @@ Resources :
         RSCKEY: "API-RES-MTRAN"
         RSCTYPE: "NAME;ARN;URI-POST"
         RSCKEY2: "RESTAPI"
-  NSMTRANSLAMBDA:
+  NSMTRANLAMBDA:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
@@ -271,7 +271,7 @@ Resources :
       Parameters:
         RSCKEY: "API-RES-MTRAN-LAMBDA"
         RSCTYPE: "NAME"
-  GETMTRANSPERM : 
+  GETMTRANPERM : 
     Type : AWS::Lambda::Permission
     Properties:
       Action : lambda:InvokeFunction
