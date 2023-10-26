@@ -42,6 +42,7 @@
          {"RESKEY":"API-RES-CATEGORIES", "RESNAME" :"categories", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-COSTCENTRES", "RESNAME" :"costcentres", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-SUBITEMS", "RESNAME" :"subitems", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-ITEMSBYCATEGORY", "RESNAME" :"itemsByCategory", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-FILTERS-LAMBDA", "RESNAME" :"getFilters", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-LOCATIONS-LAMBDA", "RESNAME" :"getLocationsMobile", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-SHOPRATES-LAMBDA", "RESNAME" :"getItemShopRates", "RESTYPE":"LAMBDA" },
@@ -52,6 +53,7 @@
          {"RESKEY":"API-RES-CATEGORIES-LAMBDA", "RESNAME" :"getCategories", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-COSTCENTRES-LAMBDA", "RESNAME" :"getCostcentres", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-SUBITEMS-LAMBDA", "RESNAME" :"getSubitems", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-ITEMSBYCATEGORY-LAMBDA", "RESNAME" :"getItemsByCategory", "RESTYPE":"LAMBDA" },
          {"RESKEY":"S3BUCKET", "RESNAME" :"expjan2023store", "RESTYPE":"S3" },
          {"RESKEY":"DBURL", "RESNAME" :"myexprds-mysqldb-rmzbonc9cn65.cbeuqpdwxuwq.us-east-1.rds.amazonaws.com", "RESTYPE":"RDS" }
       ]
