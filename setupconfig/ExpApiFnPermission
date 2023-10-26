@@ -260,7 +260,7 @@ Resources :
           Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-MTRAN"
-        RSCTYPE: "NAME;ARN;URI-POST"
+        RSCTYPE: "NAME;ARN;URI-GET"
         RSCKEY2: "RESTAPI"
   NSMTRANLAMBDA:
     Type: AWS::CloudFormation::Stack

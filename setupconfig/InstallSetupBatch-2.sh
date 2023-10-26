@@ -59,5 +59,8 @@ python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuil
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-CATEGORIES')"
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-COSTCENTRES')"
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-SUBITEMS')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETMTRANS')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-UPDATEMTRANS')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETITEMSBYCATEGORY')"
 
 echo "Run the next steps after codebuilds are completed"
