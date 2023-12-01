@@ -1,0 +1,32 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  MYBUCKETPOLICY:
+    Type : "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: 
+        Fn::Transform:
+          Name: fnMacroS3
+          Parameters :
+            INFOTYPE : 'BUCKETNAME'
+      PolicyDocument:
+        Version : 2012-10-17
+        Statement:
+          - Effect : Allow
+            Action: 
+              - S3:*
+            Resource:
+              - Fn::Join: ["" , [ "arn:aws:s3:::","expjun23store", "/*"]]
+#              - !Join
+#                  - "" 
+#                  - - Fn::Transform:
+#                        Name: fnMacroS3
+#                        Parameters :
+#                          INFOTYPE : 'BUCKETARN'
+#                    - "/*"
+              - Fn::Join: ["" , [ "arn:aws:s3:::", "expjun23store"]]
+#              - Fn::Transform:
+#                        Name: fnMacroS3
+#                        Parameters :
+#                          INFOTYPE : 'BUCKETARN'
+            Principal: "*"

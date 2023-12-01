@@ -1,30 +1,36 @@
 #Make sure to use spaces and not tabs for indentation
 AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  BUCKETNAME :
+    Type: String
+    Description: "Bucket name"
 Resources:
-  NSREGISTERSHOPFILE:
+  NSPROCESSSHOPFILE:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
         Fn::Transform:
           Name: fnMacroS3
       Parameters:
-        RSCKEY: "FN-REGISTERSHOPFILE"
+        RSCKEY: "FN-PROCESSSHOPFILE"
         RSCTYPE: "NAME;ARN"
   MYBUCKET4 : 
     Type : "AWS::S3::Bucket"
     Properties : 
-#      BucketName : !Ref BUCKETNAME
-      BucketName : 
-        Fn::Transform:
-          Name: fnMacroS3
-          Parameters :
-            INFOTYPE : 'BUCKETNAME'
+      BucketName : !Ref BUCKETNAME
+#      BucketName : 
+#        Fn::Transform:
+#          Name: fnMacroS3
+#          Parameters :
+#            INFOTYPE : 'BUCKETNAME'
       NotificationConfiguration:
         LambdaConfigurations:
            -  Event: "s3:ObjectCreated:*"
-              Function : !GetAtt NSREGISTERSHOPFILE.Outputs.RSCARN
+              Function : !GetAtt NSPROCESSSHOPFILE.Outputs.RSCARN
   MYBUCKETPOLICY:
     Type : "AWS::S3::BucketPolicy"
+    DependsOn:
+      - S3INVOKEPERM
     Properties:
       Bucket: 
         Fn::Transform:
@@ -51,14 +57,12 @@ Resources:
                         Name: fnMacroS3
                         Parameters :
                           INFOTYPE : 'BUCKETARN'
-            Principal: "*"
+            Principal: !Ref AWS::AccountId
   S3INVOKEPERM:
     Type : "AWS::Lambda::Permission"
-    DependsOn:
-      - MYBUCKETPOLICY
     Properties:
       Action : lambda:InvokeFunction
-      FunctionName : !GetAtt NSREGISTERSHOPFILE.Outputs.RSCARN
+      FunctionName : !GetAtt NSPROCESSSHOPFILE.Outputs.RSCARN
       Principal : s3.amazonaws.com
       #SourceArn : !Join ["" , [ "arn:aws:s3:::", !Ref BUCKETNAME]]
       SourceArn : 
