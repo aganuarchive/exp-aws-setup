@@ -17,8 +17,17 @@ aws cloudformation wait stack-delete-complete --stack-name myexpsnspolicy
 aws cloudformation delete-stack --stack-name myexpscheduler  
 aws cloudformation wait stack-delete-complete --stack-name myexpscheduler
 
+aws cloudformation delete-stack --stack-name queueevent  
+aws cloudformation wait stack-delete-complete --stack-name queueevent
+
 aws cloudformation delete-stack --stack-name myexpsns  
 aws cloudformation wait stack-delete-complete --stack-name myexpsns
+
+aws cloudformation delete-stack --stack-name myexps3NS3  
+aws cloudformation wait stack-delete-complete --stack-name myexps3NS3
+
+aws cloudformation delete-stack --stack-name myexps3NS2  
+aws cloudformation wait stack-delete-complete --stack-name myexps3NS2
 
 aws cloudformation delete-stack --stack-name myexpqueue  
 aws cloudformation wait stack-delete-complete --stack-name myexpqueue
