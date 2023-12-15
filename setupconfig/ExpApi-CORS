@@ -987,7 +987,7 @@ Resources :
         - TESTAPI
         - RootResourceId
       PathPart: !GetAtt NSAPIRESENTRYRCPT.Outputs.RSCID
-  TESTAPIENTRYRCPT : 
+  TESTAPIMENTRYRCPT : 
     Type : AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref TESTAPI
