@@ -298,5 +298,25 @@ Resources:
         BuildSpec : "buildgetItemsByCategory.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
+  SHOPRECEIPTS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-SHOPRECEIPTS
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildshopReceipts.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+
+
 
 

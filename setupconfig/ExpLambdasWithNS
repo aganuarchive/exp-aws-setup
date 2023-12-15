@@ -266,3 +266,18 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getItemsByCategory')			 
+  SHOPRECEIPTS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: shopReceipts
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_shopReceipts.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from shopReceipts')			 
