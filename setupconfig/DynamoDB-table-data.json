@@ -52,6 +52,7 @@
          {"RESKEY":"API-RES-ITEMS-LAMBDA", "RESNAME" :"api_updateItem", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-MTRAN-LAMBDA", "RESNAME" :"api_getMtrans", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-MTRANS-LAMBDA", "RESNAME" :"api_updateMtrans", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-GETMTRANS-LAMBDA", "RESNAME" :"api_getMtrans", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-CATEGORIES-LAMBDA", "RESNAME" :"getCategories", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-COSTCENTRES-LAMBDA", "RESNAME" :"getCostcentres", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-SUBITEMS-LAMBDA", "RESNAME" :"getSubitems", "RESTYPE":"LAMBDA" },
