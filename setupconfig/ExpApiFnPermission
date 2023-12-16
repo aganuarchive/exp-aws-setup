@@ -316,7 +316,7 @@ Resources :
           Name: fnMacroS3
       Parameters:
         RSCKEY: "API-RES-ENTRYRCPT"
-        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCTYPE: "NAME;ARN;URI-POST"
         RSCKEY2: "RESTAPI"
   NSENTRYRCPTLAMBDA:
     Type: AWS::CloudFormation::Stack
