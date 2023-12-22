@@ -281,3 +281,33 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from shopReceipts')			 
+  LAMBDAAWSACCOUNTS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: api_updateAwsAccounts
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_updateAwsAccounts.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from api_updateAwsAccounts')			 
+  LAMBDAAWSRESOURCES:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: api_updateAwsResources
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_updateAwsResources.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from api_updateAwsResources')			 

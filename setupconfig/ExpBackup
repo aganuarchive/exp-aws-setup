@@ -1,0 +1,36 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSEXPROLE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+#      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "EXP-USER-ROLE"
+        RSCTYPE: "NAME;ARN"
+  EXPVAULT:
+    Type: AWS::Backup::BackupVault
+    Properties:
+      BackupVaultName : "ExpBackupVault"
+  EXPBACKUPPLAN:
+    Type: AWS::Backup::BackupPlan
+    Properties:
+      BackupPlan : 
+        BackupPlanName: "ExpBackupPlan"
+        BackupPlanRule:
+          - RuleName : "DailyRDSBackup"
+            ScheduleExpression : "cron(0 1 * * ? *)"
+            StartWindowMinutes : 60
+            TargetBackupVault : !Ref EXPVAULT
+  EXPBACKUPRSC:
+    Type: AWS::Backup::BackupSelection
+    Properties:
+      BackupPlanId : !Ref  EXPBACKUPPLAN
+      BackupSelection :
+        SelectionName : "Exp-RDS"
+        IamRoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+        Resources : 
+          - arn:aws:rds:*:*:db:*
