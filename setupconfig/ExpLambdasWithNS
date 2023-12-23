@@ -311,14 +311,14 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_updateAwsResources')			 
-  LAMBDASEARCHITEMSBYTEXT:
+  LAMBDAITEMSBYSEARCHTEXT:
     Type: "AWS::Lambda::Function"
     Properties: 
-      FunctionName: api_searchItemsByText
+      FunctionName: api_itemsBySearchText
       Role : !GetAtt NSEXPROLE.Outputs.RSCARN
       Runtime: python3.9
       Timeout : 300
-      Handler: lambda_getItemsBySearchtext.lambda_handler
+      Handler: lambda_itemsBySearchtext.lambda_handler
       Tags:
         - Key: "ADDLAYERS"
           Value: "exputils"

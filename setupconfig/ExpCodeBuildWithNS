@@ -352,7 +352,7 @@ Resources:
         BuildSpec : "buildUpdateAwsResources.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
-  CBSEARCHITEMSBYTEXT:
+  CBITEMSBYSEARCHTEXT:
     Type: AWS::CodeBuild::Project
     Properties:   
       Artifacts:
@@ -362,12 +362,12 @@ Resources:
         Image: "aws/codebuild/standard:5.0"
         ImagePullCredentialsType: CODEBUILD
         Type: LINUX_CONTAINER
-      Name: CB-SEARCHITEMSBYTEXT
+      Name: CB-ITEMSBYSEARCHTEXT
       ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
       Source:
         Auth:
           Type: OAUTH
-        BuildSpec : "buildSearchItemsByText.yml"
+        BuildSpec : "buildItemsBySearchText.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
 
