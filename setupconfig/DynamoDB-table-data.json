@@ -48,6 +48,7 @@
          {"RESKEY":"API-RES-ENTRYRCPT", "RESNAME" :"entry-receipt", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-AWSACCOUNTS", "RESNAME" :"aws-accounts", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-AWSRESOURCES", "RESNAME" :"aws-resources", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-SEARCHITEMSBYTEXT", "RESNAME" :"SEARCHitemsByText", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-FILTERS-LAMBDA", "RESNAME" :"getFilters", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-LOCATIONS-LAMBDA", "RESNAME" :"getLocationsMobile", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-SHOPRATES-LAMBDA", "RESNAME" :"getItemShopRates", "RESTYPE":"LAMBDA" },
@@ -63,6 +64,7 @@
          {"RESKEY":"API-RES-ENTRYRCPT-LAMBDA", "RESNAME" :"shopReceipts", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-AWSACCOUNTS-LAMBDA", "RESNAME" :"api_updateAwsAccounts", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-AWSRESOURCES-LAMBDA", "RESNAME" :"api_updateAwsResources", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-SEARCHITEMSBYTEXT-LAMBDA", "RESNAME" :"api_searchItemsByText", "RESTYPE":"LAMBDA" },
          {"RESKEY":"S3BUCKET", "RESNAME" :"expnov23store", "RESTYPE":"S3" },
          {"RESKEY":"DBURL", "RESNAME" :"myexprds-mysqldb-rmzbonc9cn65.cbeuqpdwxuwq.us-east-1.rds.amazonaws.com", "RESTYPE":"RDS" }
       ]
