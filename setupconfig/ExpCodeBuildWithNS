@@ -367,7 +367,7 @@ Resources:
       Source:
         Auth:
           Type: OAUTH
-        BuildSpec : "buildItemsBySearchText.yml"
+        BuildSpec : "buildSearchItemsByText.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
 
