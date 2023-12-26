@@ -26,3 +26,6 @@ Outputs:
   RSCURI:
     Description: Resource URI
     Value: !GetAtt 'CustomFSxResource.RSCURI'
+  RSCINTID:
+    Description: Resource ID or name
+    Value: !GetAtt 'CustomFSxResource.RSCINTID'
