@@ -390,3 +390,61 @@ Resources :
       FunctionName : !GetAtt NSAWSRSCLAMBDA.Outputs.RSCID
       Principal : apigateway.amazonaws.com
       SourceArn : !GetAtt NSAPIRESAWSRSCLAMBDA.Outputs.RSCARN
+
+##########Setup for itemsbysearchtext 
+  NSAPIRESITEMSBYTEXTLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-ITEMSBYSEARCHTEXT"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSITEMSBYTEXTLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-ITEMSBYSEARCHTEXT-LAMBDA"
+        RSCTYPE: "NAME"
+  GETITEMSBYTEXTPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSITEMSBYTEXTLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESITEMSBYTEXTLAMBDA.Outputs.RSCARN
+
+##########Setup for awsrscquotas 
+  NSAPIRESAWSRSCQUOTASLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-AWSRSCQUOTAS"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSAWSRSCQUOTASLAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-AWSRSCQUOTAS-LAMBDA"
+        RSCTYPE: "NAME"
+  GETAWSRSCQUOTASPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSAWSRSCQUOTASLAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESAWSRSCQUOTASLAMBDA.Outputs.RSCARN
+
+

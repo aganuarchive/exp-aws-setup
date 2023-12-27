@@ -54,9 +54,34 @@ Resources:
                 'status': 'success'
             }
             return response
+  FNMACRO2:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: fnMacro2
+      Runtime: python3.9
+      Role : 
+          Fn::ImportValue:
+            ROLEARN
+      Handler: lambda_fnMacro2.lambda_handler
+      MemorySize: 128
+      Timeout: 300
+      InlineCode: |
+        def lambda_fnMacro2.lambda_handler(event, context):
+            response = {
+                'requestId': event['requestId'],
+                'status': 'success'
+            }
+            return response
+
   Transform:
     Type: AWS::CloudFormation::Macro
     Properties:
       Name: fnMacroS3
       Description: Provides the Nested stack template
       FunctionName: !GetAtt FNMACROS3.Arn
+  Transform2:
+    Type: AWS::CloudFormation::Macro
+    Properties:
+      Name: fnMacro2
+      Description: Provides the Nested stack template
+      FunctionName: !GetAtt FNMACRO2.Arn
