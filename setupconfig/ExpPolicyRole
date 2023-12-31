@@ -15,8 +15,13 @@ Resources:
                 - "codebuild.amazonaws.com"
                 - "events.amazonaws.com"
                 - "scheduler.amazonaws.com"
+                - "backup.amazonaws.com"
+                - "apigateway.amazonaws.com"
             Action:
               - "sts:AssumeRole"
+      Tags:
+        - Key : "Project"
+          Value : "Expense"
   EXPUPDATELAMBDAPOLICY:
     Type : "AWS::IAM::ManagedPolicy"
     Properties:
@@ -56,6 +61,19 @@ Resources:
                    - "s3:ListAllMyBuckets"
                    - "s3:ListBucket"
                  Resource: "*"
+               - Effect: "Allow"
+                 Action:
+                   - "rds:AddTagsToResource"
+                   - "rds:ListTagsForResource"
+                   - "rds:DescribeDBSnapshots"
+                   - "rds:CreateDBSnapshot"
+                   - "rds:CopyDBSnapshot"
+                   - "rds:DescribeDBInstances"
+                   - "rds:CreateDBClusterSnapshot"
+                   - "rds:DescribeDBClusters"
+                   - "rds:DescribeDBClusterSnapshots"
+                   - "rds:CopyDBClusterSnapshot"                 
+                 Resource: "*"
       Roles:
         - !Ref EXPUSERROLE
   EXPCODEBUILDPOLICY:
@@ -71,6 +89,10 @@ Resources:
                - logs:CreateLogGroup
                - logs:CreateLogStream
                - logs:PutLogEvents
+               - logs:DescribeLogGroups
+               - logs:DescribeLogStreams
+               - logs:GetLogEvents
+               - logs:FilterLogEvents
           - Effect: "Allow"
             Resource: "*"
             Action: 

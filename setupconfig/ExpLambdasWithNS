@@ -341,3 +341,33 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_getAwsRscQuotas')			 
+  LAMBDAAWSRDSACCOUNTINFO:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: api_getAwsRdsAccountInfo
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getAwsRdsAccountInfo.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from api_getAwsRdsAccountInfo')			 
+  LAMBDAAWSACCOUNTS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: api_getAwsAccounts
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_getAwsAccounts.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from api_getAwsAccounts')			 
