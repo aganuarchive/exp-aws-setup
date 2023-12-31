@@ -191,3 +191,134 @@ Resources :
           ResponseModels:
               application/json: 'Empty'
       AuthorizationType : NONE	  
+
+##### Setup for AwsRdsAccountInfo
+
+  NSAPIRESAWSRDSACCTINFO:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "API-RES-AWSRDSACCOUNTINFO"
+        RSCTYPE: "NAME;URI-GET"
+        RSCKEY2: "RESTAPI"
+  TESTAPIAWSRDSACCTINFO : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
+      ParentId: !GetAtt NSAPIROOTID.Outputs.RSCINTID
+#      ParentId: "9la2c7da21"
+      PathPart: !GetAtt NSAPIRESAWSRDSACCTINFO.Outputs.RSCID
+  NSAPIRESGETLAMBDAAWSRDSACCTINFO:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "API-RES-AWSRDSACCOUNTINFO-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+
+  TESTAPIMSAWSRDSACCTINFO : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
+      ResourceId: !Ref TESTAPIAWSRDSACCTINFO
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAAWSRDSACCTINFO.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#        PassthroughBehavior : WHEN_NO_TEMPLATES
+#        RequestTemplates :
+#            "application/json" : "{ \"searchtext\": \"$input.params('searchitem')\" }"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+#      RequestParameters :
+#          method.request.querystring.searchtext : true
+      AuthorizationType : NONE
+  TESTAPIAWSRDSACCTINFO2M : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
+      ResourceId: !Ref TESTAPIAWSRDSACCTINFO
+      HttpMethod: OPTIONS
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : MOCK
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAAWSRDSACCTINFO.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+
+##### Setup for AwsAccounts
+
+  NSAPIRESAWSACCTS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "API-RES-AWSACCOUNTS"
+        RSCTYPE: "NAME;URI-POST"
+        RSCKEY2: "RESTAPI"
+  NSAPIRESGETLAMBDAAWSACCTS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "API-RES-GETAWSACCOUNTS-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+
+  TESTAPIMSAWSACCTS : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
+      ResourceId: !GetAtt NSAPIRESAWSACCTS.Outputs.RSCINTID
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAAWSACCTS.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#        PassthroughBehavior : WHEN_NO_TEMPLATES
+#        RequestTemplates :
+#            "application/json" : "{ \"searchtext\": \"$input.params('searchitem')\" }"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+#      RequestParameters :
+#          method.request.querystring.searchtext : true
+      AuthorizationType : NONE
