@@ -356,7 +356,7 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_getAwsRdsAccountInfo')			 
-  LAMBDAAWSACCOUNTS:
+  LAMBDAGETAWSACCOUNTS:
     Type: "AWS::Lambda::Function"
     Properties: 
       FunctionName: api_getAwsAccounts
