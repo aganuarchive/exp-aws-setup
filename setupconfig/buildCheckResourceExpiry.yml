@@ -1,0 +1,17 @@
+version : 0.2
+phases :
+  build: 
+    commands:
+      - echo "Zipping lambda package"
+      - cd awsresources
+      - zip  ../awsresources.zip lambda_checkExpiry.py
+      - pwd
+      - ls
+      - cd ..
+      - pwd
+      - ls
+  post_build:
+    commands:
+#      - aws lambda create-function --function-name processShopFile --zip-file fileb://processShopFile.zip --role arn:aws:iam::346925588329:role/ExpLambdaRole --runtime python3.8  --handler lambda_processShopFile.lambda_handler 
+      - aws lambda update-function-code --function-name checkResourceExpiry --zip-file fileb://awsresources.zip  
+      - echo "Build Done!"
