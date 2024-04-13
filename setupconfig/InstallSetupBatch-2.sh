@@ -38,6 +38,9 @@ python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.updateDBEndpo
 aws cloudformation create-stack --stack-name myexpapi --template-body file://./ExpApi-CORS   --capabilities CAPABILITY_AUTO_EXPAND           
 aws cloudformation wait stack-create-complete --stack-name myexpapi
 
+aws cloudformation create-stack --stack-name myexpapi2 --template-body file://./ExpApi-CORS2  --capabilities CAPABILITY_AUTO_EXPAND           
+aws cloudformation wait stack-create-complete --stack-name myexpapi2
+
 aws cloudformation create-stack --stack-name myexpapifnp --template-body file://./ExpApiFnPermission   --capabilities CAPABILITY_AUTO_EXPAND             
 aws cloudformation wait stack-create-complete --stack-name myexpapifnp
 
@@ -64,11 +67,12 @@ python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuil
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETITEMSHOPRATES')"
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETFILTERS')"
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-UPDATEITEM')"
-python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-CATEGORIES')"
-python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-COSTCENTRES')"
-python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-SUBITEMS')"
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETMTRANS')"
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-UPDATEMTRANS')"
 python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETITEMSBYCATEGORY')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETAWSRDSACCOUNTINFO')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-GETAWSACCOUNTS')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-SHOPRECEIPTS')"
+python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-UPDATEAWSRESOURCES')"
 
 echo "Run the next steps after codebuilds are completed"

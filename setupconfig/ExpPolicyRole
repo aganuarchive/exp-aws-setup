@@ -17,6 +17,7 @@ Resources:
                 - "scheduler.amazonaws.com"
                 - "backup.amazonaws.com"
                 - "apigateway.amazonaws.com"
+                - "ec2.amazonaws.com"
             Action:
               - "sts:AssumeRole"
       Tags:
@@ -60,6 +61,13 @@ Resources:
                    - "codebuild:BatchGetProjects"
                    - "s3:ListAllMyBuckets"
                    - "s3:ListBucket"
+                   - "ec2:CreateNetworkInterface"
+                   - "ec2:DescribeNetworkInterfaces"
+                   - "ec2:DescribeSubnets"
+                   - "ec2:DeleteNetworkInterface"
+                   - "ec2:AssignPrivateIpAddresses"
+                   - "ec2:UnassignPrivateIpAddresses"
+                   - "events:PutEvents" 
                  Resource: "*"
                - Effect: "Allow"
                  Action:
@@ -73,6 +81,10 @@ Resources:
                    - "rds:DescribeDBClusters"
                    - "rds:DescribeDBClusterSnapshots"
                    - "rds:CopyDBClusterSnapshot"                 
+                 Resource: "*"
+               - Effect: "Allow"
+                 Action:
+                   - "quicksight:*"
                  Resource: "*"
       Roles:
         - !Ref EXPUSERROLE

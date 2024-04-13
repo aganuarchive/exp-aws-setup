@@ -1,0 +1,67 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSRSCINFO:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "FN-PROCESSEBEVENT"
+        RSCTYPE: "NAME;ARN"
+  NSEXPROLE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "EXP-USER-ROLE"
+        RSCTYPE: "NAME;ARN"
+  EXPEC2RULE:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : "ec2-monitor-rule"
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      EventBusName : "eb-central"
+      EventPattern:
+        source:
+          - aws.ec2
+        detail-type:
+          - EC2 Instance State-change Notification
+        detail:
+          state:
+            - running
+            - terminated
+      Targets:
+        - Id : !GetAtt NSRSCINFO.Outputs.RSCID
+          Arn: !GetAtt NSRSCINFO.Outputs.RSCARN
+  EC2RULEPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSRSCINFO.Outputs.RSCID
+      Principal : events.amazonaws.com
+      SourceArn : !GetAtt EXPEC2RULE.Arn
+  EXPRDSRULE:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : "rds-monitor-rule"
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      EventBusName : "eb-central"
+      EventPattern:
+        source:
+          - aws.rds
+        detail-type:
+          - RDS DB Instance Event
+      Targets:
+        - Id : !GetAtt NSRSCINFO.Outputs.RSCID
+          Arn: !GetAtt NSRSCINFO.Outputs.RSCARN
+  RDSRULEPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSRSCINFO.Outputs.RSCID
+      Principal : events.amazonaws.com
+      SourceArn : !GetAtt EXPRDSRULE.Arn

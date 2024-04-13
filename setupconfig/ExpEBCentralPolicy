@@ -1,0 +1,39 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  CENTRALEB:
+    Type: AWS::Events::EventBusPolicy
+    Properties:   
+      EventBusName : "eb-central"
+      StatementId : Action1For-agexp241
+      Statement : 
+        Effect : Allow
+        Action : events:PutEvents
+        Principal : 
+          AWS :
+            - "arn:aws:iam::637423170774:root"
+        Resource : "arn:aws:events:us-east-1:080349858544:event-bus/eb-central"
+  CENTRALEB2:
+    Type: AWS::Events::EventBusPolicy
+    Properties:   
+      EventBusName : "eb-central"
+      StatementId : Action2For-agexp241
+      Statement : 
+        Effect : Allow
+        Action : 
+          - events:PutEvents
+          - events:PutRule
+          - events:PutTargets
+          - events:DeleteRule
+          - events:RemoveTargets
+          - events:DisableRule
+          - events:EnableRule
+          - events:TagResource
+          - events:UntagResource
+          - events:DescribeRule
+          - events:ListTargetsByRule
+          - events:ListTagsForResource
+        Principal : 
+          AWS :
+            - "arn:aws:iam::637423170774:root"
+        Resource : "arn:aws:events:us-east-1:080349858544:event-bus/eb-central"

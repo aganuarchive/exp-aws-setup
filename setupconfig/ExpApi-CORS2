@@ -109,8 +109,8 @@ Resources :
     Type : AWS::ApiGateway::Resource
     Properties:
       RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
-#      ParentId: !GetAtt NSAPIROOTID.Outputs.RSCINTID
-      ParentId: "9la2c7da21"
+      ParentId: !GetAtt NSAPIROOTID.Outputs.RSCINTID
+#      ParentId: "9la2c7da21"
       PathPart: !GetAtt NSAPIRESAWSRSCQUOTA.Outputs.RSCID
   NSAPIRESGETLAMBDAAWSRSCQUOTA:
     Type: AWS::CloudFormation::Stack
@@ -321,4 +321,54 @@ Resources :
               application/json: 'Empty'
 #      RequestParameters :
 #          method.request.querystring.searchtext : true
+      AuthorizationType : NONE
+
+##### Setup for QSAPI
+
+  NSAPIRESQSAPI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "API-RES-QSAPI"
+        RSCTYPE: "NAME;URI-GET"
+        RSCKEY2: "RESTAPI"
+  TESTAPIQSAPI : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
+      ParentId: !GetAtt NSAPIROOTID.Outputs.RSCINTID
+#      ParentId: "9la2c7da21"
+      PathPart: !GetAtt NSAPIRESQSAPI.Outputs.RSCID
+  NSAPIRESGETLAMBDAQSAPI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "API-RES-GETQSAPI-LAMBDA"
+        RSCTYPE: "NAME;ARN"
+  TESTAPIMSQSAPI : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
+      ResourceId: !Ref TESTAPIQSAPI
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !GetAtt NSAPIRESGETLAMBDAQSAPI.Outputs.RSCARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
       AuthorizationType : NONE

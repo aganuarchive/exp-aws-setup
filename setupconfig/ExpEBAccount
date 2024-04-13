@@ -1,0 +1,7 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  CENTRALEB:
+    Type: AWS::Events::EventBus
+    Properties:   
+      Name : "eb-account"
