@@ -504,5 +504,35 @@ Resources :
       Principal : apigateway.amazonaws.com
       SourceArn : !GetAtt NSAPIRESAWSACCTSLAMBDA.Outputs.RSCARN
 
+##########Setup for qsapi 
+  NSAPIRESQSAPILAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-QSAPI"
+        RSCTYPE: "NAME;ARN;URI-GET"
+        RSCKEY2: "RESTAPI"
+  NSQSAPILAMBDA:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-GETQSAPI-LAMBDA"
+        RSCTYPE: "NAME"
+  GETQSAPIPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !GetAtt NSQSAPILAMBDA.Outputs.RSCID
+      Principal : apigateway.amazonaws.com
+      SourceArn : !GetAtt NSAPIRESQSAPILAMBDA.Outputs.RSCARN
+
+
+
 
 

@@ -81,3 +81,23 @@ Resources:
         BuildSpec : "buildFnMacroS3.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
+  FNMACRO2:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-FNMACRO2
+      ServiceRole: 
+          Fn::ImportValue:
+            ROLEARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildFnMacro2.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB

@@ -406,5 +406,91 @@ Resources:
         BuildSpec : "buildGetAwsAccounts.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
+  CBCHECKRESOURCEEXPIRY:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-CHECKRESOURCEEXPIRY
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildCheckResourceExpiry.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBGETQSDASHBOARDURL:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETQSDASHBOARDURL
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildGetQsDashboardUrl.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBPROCESSEBEVENT:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-PROCESSEBEVENT
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildprocessEBEvent.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBCHECKEIP:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-CHECKEIP
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildcheckEIP.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

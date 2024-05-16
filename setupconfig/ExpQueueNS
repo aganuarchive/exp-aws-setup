@@ -6,7 +6,7 @@ Resources:
     Properties:
       TemplateURL:
         Fn::Transform:
-          Name: fnMacroS3
+          Name: fnMacro2
       Parameters:
         RSCKEY: "EXP-SHOP-QUEUE"
         RSCTYPE: "NAME"
@@ -15,7 +15,7 @@ Resources:
     Properties:
       TemplateURL:
         Fn::Transform:
-          Name: fnMacroS3
+          Name: fnMacro2
       Parameters:
         RSCKEY: "EXP-CB-QUEUE"
         RSCTYPE: "NAME"

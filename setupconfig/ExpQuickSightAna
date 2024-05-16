@@ -1,0 +1,222 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSRDS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "DBURL"
+        RSCTYPE: "NAME;RDSINSTID"
+  NSDATASET1:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "QSDS-TRNANA1"
+        RSCTYPE: "NAME;ARN"
+  TRNANA1:
+    Type : AWS::QuickSight::Analysis
+    Properties:
+      AwsAccountId : !Ref 'AWS::AccountId'
+      AnalysisId : "TrnAnalysis-1"
+      Name : "Trn Analysis (Monthly)"
+      Parameters :
+        StringParameters :
+          - Name : "period"
+            Values :
+              - "2023-02"
+          - Name : "subdesc"
+            Values :
+              - "Cars"
+      Definition :
+        DataSetIdentifierDeclarations :
+          - DataSetArn: !GetAtt NSDATASET1.Outputs.RSCARN
+            Identifier : !GetAtt NSDATASET1.Outputs.RSCID
+#            Identifier : TrnAna1
+        ColumnConfigurations :
+          - Column :
+              ColumnName : "monthyear"
+              DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+          - Column :
+              ColumnName : "subdesc"
+              DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+        ParameterDeclarations :
+          - StringParameterDeclaration :
+              MappedDataSetParameters :
+#                - DataSetIdentifier : TrnAna1
+                - DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                  DataSetParameterName : "monthyear"
+              Name : "period"
+              ParameterValueType : SINGLE_VALUED
+          - StringParameterDeclaration :
+              MappedDataSetParameters :
+#                - DataSetIdentifier : TrnAna1
+                - DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                  DataSetParameterName : "subdesc"
+              Name : "subdesc"
+              ParameterValueType : SINGLE_VALUED
+        FilterGroups : 
+          - CrossDataset : ALL_DATASETS
+            FilterGroupId : "filter1"
+            Filters :
+              - CategoryFilter :
+                  Column : 
+                    ColumnName : "subdesc"
+#                    DataSetIdentifier : TrnAna1
+                    DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                  FilterId : "filterid1"
+                  Configuration :
+                    CustomFilterConfiguration :
+                      MatchOperator : EQUALS
+                      ParameterName : "subdesc"
+                      NullOption : ALL_VALUES
+            ScopeConfiguration :
+              SelectedSheets :
+                SheetVisualScopingConfigurations :
+                  - Scope : SELECTED_VISUALS
+                    SheetId : PieAna1
+                    VisualIds :
+                      - "pieVisual"
+            Status : ENABLED
+          - CrossDataset : ALL_DATASETS
+            FilterGroupId : "filter2"
+            Filters :
+              - CategoryFilter :
+                  Column : 
+                    ColumnName : "monthyear"
+#                    DataSetIdentifier : TrnAna1
+                    DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                  FilterId : "filterid2"
+                  Configuration :
+                    CustomFilterConfiguration :
+                      MatchOperator : EQUALS
+                      ParameterName : "period"
+                      NullOption : ALL_VALUES
+            ScopeConfiguration :
+              SelectedSheets :
+                SheetVisualScopingConfigurations :
+                  - Scope : SELECTED_VISUALS
+                    SheetId : PieAna1
+                    VisualIds :
+                      - "pieVisual"
+            Status : ENABLED
+        Sheets :
+          - ContentType : INTERACTIVE
+            Name : "TrnAnalysis"
+            SheetId : TrnAna1
+            Title : "Trn Analysis(By months)"
+            Visuals :
+              - PivotTableVisual :
+                  VisualId : "ptVisual"
+                  Title : 
+                    FormatText :
+                      PlainText : "PT1-Analysis"
+                  Actions :
+                    - CustomActionId : "Action1"
+                      Name : "Action1"
+                      Status : ENABLED
+                      Trigger : DATA_POINT_MENU
+                      ActionOperations :
+                        - NavigationOperation : 
+                            LocalNavigationConfiguration :
+                              TargetSheetId : PieAna1
+                        - SetParametersOperation : 
+                            ParameterValueConfigurations : 
+                              - DestinationParameterName : "period"
+                                Value : 
+                                   SourceField : "monthyearid"  
+#                                  SourceColumn : 
+#                                      ColumnName : "monthyear"
+#                                      DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                              - DestinationParameterName : "subdesc"
+                                Value : 
+                                   SourceField : "subdescid"  
+                  ChartConfiguration : 
+                    FieldWells :
+                      PivotTableAggregatedFieldWells :
+                        Rows : 
+                          - CategoricalDimensionField :
+                              Column : 
+                                ColumnName : "maindesc"
+                                DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                              FieldId : "maindescid"
+                          - CategoricalDimensionField :
+                              Column : 
+                                ColumnName : "subdesc"
+                                DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                              FieldId : "subdescid"
+                        Columns :
+                          - CategoricalDimensionField :
+                              Column : 
+                                ColumnName : "monthyear"
+                                DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                              FieldId : "monthyearid"
+                        Values :
+                          - NumericalMeasureField :
+                              Column : 
+                                ColumnName : "groupamount"
+                                DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                              FieldId : "groupamountid"
+                              AggregationFunction : 
+                                SimpleNumericalAggregation : 
+                                  SUM
+                    TotalOptions :
+                      ColumnTotalOptions :
+                        CustomLabel : "Totals"
+                        TotalsVisibility : VISIBLE
+                        TotalAggregationOptions :
+                          - FieldId : "groupamountid"
+                            TotalAggregationFunction :
+                              SimpleTotalAggregationFunction : SUM
+                      RowTotalOptions :
+                        CustomLabel : "Totals"
+                        TotalsVisibility : VISIBLE
+                        TotalAggregationOptions :
+                          - FieldId : "groupamountid"
+                            TotalAggregationFunction :
+                              SimpleTotalAggregationFunction : SUM
+          - ContentType : INTERACTIVE
+            Name : "PieAnalysis"
+            SheetId : PieAna1
+            Title : "ItemSummary (By Subitem)"
+            Visuals :
+              - PieChartVisual :
+                  VisualId : "pieVisual"
+                  Title : 
+                    FormatText :
+                      PlainText : "Pie-Analysis"
+                  ChartConfiguration :
+                    FieldWells :
+                      PieChartAggregatedFieldWells :
+                        Category :
+                          - CategoricalDimensionField :
+                              Column : 
+                                ColumnName : "itemdesc"
+                                DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                              FieldId : "itemdescid"
+                        Values :
+                          - NumericalMeasureField :
+                              Column : 
+                                ColumnName : "groupamount"
+                                DataSetIdentifier : !GetAtt NSDATASET1.Outputs.RSCID
+                              FieldId : "groupamountid"
+                              AggregationFunction : 
+                                SimpleNumericalAggregation : 
+                                  SUM
+      Permissions:
+        - Actions:
+            - quicksight:RestoreAnalysis
+            - quicksight:UpdateAnalysisPermissions
+            - quicksight:DeleteAnalysis
+            - quicksight:QueryAnalysis
+            - quicksight:DescribeAnalysisPermissions
+            - quicksight:DescribeAnalysis
+            - quicksight:UpdateAnalysis
+          Principal: !Sub
+            - 'arn:aws:quicksight:us-east-1:${AWS::AccountId}:user/default/${AWS::AccountId}'
+            - Account: !Ref 'AWS::AccountId'

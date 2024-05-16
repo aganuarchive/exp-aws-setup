@@ -89,3 +89,16 @@ Resources :
               ProjectionType : "ALL"
       TableName : "RESTABLE"
       BillingMode: PAY_PER_REQUEST	  
+  AWSRESOURCES : 
+    Type : AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions: 
+        - 
+          AttributeName: "RESOURCE-ARN"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "RESOURCE-ARN"
+          KeyType: "HASH"
+      TableName : "AWS-RESOURCES"
+      BillingMode: PAY_PER_REQUEST	  

@@ -1,0 +1,329 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  DATASOURCE1:
+    Type: AWS::QuickSight::DataSource
+    Properties:   
+      AwsAccountId : !Ref 'AWS::AccountId'
+      DataSourceId : "DSID1"
+      DataSourceParameters :
+        RdsParameters : 
+          InstanceId : "myexprds-mysqldb-yrcy2heewm8e"
+          Database : "ExpensesDB"
+      Credentials :
+        CredentialPair :
+          Username : "admin"
+          Password : "ramrao11"
+      Name : "Dataset1"
+      Type : "MYSQL" 
+  QSDATASET1:
+    Type: AWS::QuickSight::DataSet
+    DependsOn :
+      DATASOURCE1
+    Properties:   
+      AwsAccountId : !Ref 'AWS::AccountId'
+      ImportMode : "DIRECT_QUERY"
+      Name : "Dataset1"
+      Permissions:
+        - Actions:
+            - quicksight:PassDataSet
+            - quicksight:DescribeIngestion
+            - quicksight:CreateIngestion
+            - quicksight:UpdateDataSet
+            - quicksight:DeleteDataSet
+            - quicksight:DescribeDataSet
+            - quicksight:CancelIngestion
+            - quicksight:DescribeDataSetPermissions
+            - quicksight:ListIngestions
+            - quicksight:UpdateDataSetPermissions
+          Principal: !Sub
+            - 'arn:aws:quicksight:us-east-1:${AWS::AccountId}:user/default/610131258266'
+            - Account: !Ref 'AWS::AccountId'
+      DataSetId : "Dataset1"
+      LogicalTableMap : 
+        LogicalTable : 
+          Alias : "items1"
+          DataTransforms :
+            - CreateColumnsOperation :
+                Columns :
+                  - ColumnId : ItemCount
+                    ColumnName : CountItem
+                    Expression : "count({ITEM_CODE})"
+          Source : 
+            PhysicalTableId : "table"
+      PhysicalTableMap :
+        table :
+          RelationalTable :
+            DataSourceArn : !Sub 'arn:aws:quicksight:us-east-1:${AWS::AccountId}:datasource/DSID1'
+            Name : "items"
+            InputColumns :
+              - Name : "ITEM_CODE"
+                Type : "INTEGER"
+              - Name : "SUB_ITEM_CODE"
+                Type : "INTEGER"
+  DATASETANA1:
+    Type: AWS::QuickSight::DataSet
+    DependsOn :
+      DATASOURCE1
+    Properties:   
+      AwsAccountId : !Ref 'AWS::AccountId'
+      ImportMode : "DIRECT_QUERY"
+      Name : "TrnAna1"
+      Permissions:
+        - Actions:
+            - quicksight:PassDataSet
+            - quicksight:DescribeIngestion
+            - quicksight:CreateIngestion
+            - quicksight:UpdateDataSet
+            - quicksight:DeleteDataSet
+            - quicksight:DescribeDataSet
+            - quicksight:CancelIngestion
+            - quicksight:DescribeDataSetPermissions
+            - quicksight:ListIngestions
+            - quicksight:UpdateDataSetPermissions
+          Principal: !Sub
+            - 'arn:aws:quicksight:us-east-1:${AWS::AccountId}:user/default/610131258266'
+            - Account: !Ref 'AWS::AccountId'
+      DataSetId : "DatasetAna1"
+      PhysicalTableMap :
+        table :
+          CustomSql :
+            SqlQuery : select DATE_FORMAT(th.trn_date,'%Y-%m') monthyear, MI.MAIN_ITEM_DESC maindesc, SI.SUB_ITEM_DESC subdesc, I.ITEM_DESC itemdesc, ROUND(SUM(tl.AMOUNT),2) groupamount from trn_header th JOIN locations l ON th.LOCATION_NO = l.LOCATION_NO JOIN trn_types tt ON th.trn_type_code = tt.trn_type_code JOIN trn_lines tl ON tl.TRN_NO = th.TRN_NO JOIN items I ON I.ITEM_CODE = tl.ITEM_CODE JOIN sub_items SI ON SI.SUB_ITEM_CODE = I.SUB_ITEM_CODE JOIN main_items MI ON MI.MAIN_ITEM_CODE = SI.MAIN_ITEM_CODE LEFT OUTER JOIN crdb_cards c ON th.CARD_NO = c.card_CODE WHERE I.ITEM_CODE != 210 AND th.TRN_DATE >= '2023-01-01'  and th.TRN_DATE <= '2023-07-31'  AND (  th.trn_type_code = 1) GROUP BY DATE_FORMAT(th.trn_date,'%Y-%M'), MI.MAIN_ITEM_DESC, SI.SUB_ITEM_DESC, I.ITEM_CODE 
+            DataSourceArn : !Sub 'arn:aws:quicksight:us-east-1:${AWS::AccountId}:datasource/DSID1'
+            Name : "TrnAnalysis-1"
+            Columns :
+              - Name : "monthyear"
+                Type : "STRING"
+              - Name : "maindesc"
+                Type : "STRING"
+              - Name : "subdesc"
+                Type : "STRING"
+              - Name : "itemdesc"
+                Type : "STRING"
+              - Name : "groupamount"
+                Type : "DECIMAL"
+  QSTEMP1:
+    Type : AWS::QuickSight::Template
+    DependsOn :
+      QSDATASET1
+    Properties:
+      AwsAccountId : !Ref 'AWS::AccountId'
+      TemplateId : "TmpID1"
+      Name : "TmpID1"
+      Definition:
+        DataSetConfigurations:
+          - Placeholder : "test"
+            DataSetSchema : 
+              ColumnSchemaList : 
+                - Name : "item_code"
+                  DataType : "INTEGER"
+                - Name : "sub_item_code"
+                  DataType : "INTEGER"
+        Sheets :
+          - Name : "SheetTemp1"
+            ContentType : "INTERACTIVE"
+            SheetId : "SheetTempId1"
+  QSANA1:
+    Type : AWS::QuickSight::Analysis
+    Properties:
+      AwsAccountId : !Ref 'AWS::AccountId'
+      AnalysisId : "AnaID-1"
+      Name : "Ana-1"
+      Definition :
+        DataSetIdentifierDeclarations :
+          - DataSetArn: !GetAtt QSDATASET1.Arn
+            Identifier : Dataset1
+        Sheets :
+          - ContentType : INTERACTIVE
+            Name : SheetAna1
+            SheetId : SheetId1
+            Title : TitleSheetId1
+            Visuals :
+              - BarChartVisual :
+                  VisualId : "v1barchart"
+                  Title : 
+                    FormatText :
+                      PlainText : "V1-Analysis"
+                  ChartConfiguration : 
+                    Orientation : VERTICAL
+                    CategoryAxis :
+                      AxisLineVisibility : VISIBLE
+                      GridLineVisibility : VISIBLE
+                      DataOptions :
+                        NumericAxisOptions :
+                          Range :
+                            MinMax :
+                              Minimum : 1
+                              Maximum : 500
+                    CategoryLabelOptions:
+                      AxisLabelOptions:
+                        - CustomLabel : "Subitem"
+                          ApplyTo :
+                            FieldId : "Subitemfield"
+                            Column :
+                              ColumnName : "SUB_ITEM_CODE"
+                              DataSetIdentifier : Dataset1
+                      Visibility: "VISIBLE"
+                    ValueAxis:
+                      AxisLineVisibility : VISIBLE
+                      GridLineVisibility : VISIBLE
+                      DataOptions:
+                        NumericAxisOptions :
+                          Range :
+                            MinMax :
+                              Minimum : 1
+                              Maximum : 500
+                          Scale :
+                            Linear :
+                              StepCount : 20
+#                              StepSize : 20
+                    ValueLabelOptions:
+                      AxisLabelOptions:
+                        - CustomLabel : "Itemcount"
+                          ApplyTo :
+                            FieldId : "countitem"
+                            Column :
+                              ColumnName : "CountItem"
+                              DataSetIdentifier : Dataset1
+                      Visibility: "VISIBLE"
+      Permissions:
+        - Actions:
+            - quicksight:RestoreAnalysis
+            - quicksight:UpdateAnalysisPermissions
+            - quicksight:DeleteAnalysis
+            - quicksight:QueryAnalysis
+            - quicksight:DescribeAnalysisPermissions
+            - quicksight:DescribeAnalysis
+            - quicksight:UpdateAnalysis
+          Principal: !Sub
+            - 'arn:aws:quicksight:us-east-1:${AWS::AccountId}:user/default/610131258266'
+            - Account: !Ref 'AWS::AccountId'
+  QSANA2:
+    Type : AWS::QuickSight::Analysis
+    Properties:
+      AwsAccountId : !Ref 'AWS::AccountId'
+      AnalysisId : "AnaID-2"
+      Name : "Sub-item summary"
+      Definition :
+        DataSetIdentifierDeclarations :
+          - DataSetArn: !GetAtt QSDATASET1.Arn
+            Identifier : Dataset1
+        Sheets :
+          - ContentType : INTERACTIVE
+            Name : "Item-summary"
+            SheetId : SheetId2
+            Title : "Sub-item wise count"
+            Visuals :
+              - BarChartVisual :
+                  VisualId : "v2barchart"
+                  Title : 
+                    FormatText :
+                      PlainText : "V2-Analysis"
+                  ChartConfiguration : 
+                    Orientation : VERTICAL
+                    FieldWells :
+                      BarChartAggregatedFieldWells :
+                        Category :
+                          - NumericalDimensionField :
+                              Column : 
+                                ColumnName : "SUB_ITEM_CODE"
+                                DataSetIdentifier : Dataset1
+                              FieldId : "subitemid"
+                        Values :
+                          - NumericalMeasureField :
+                              Column : 
+                                ColumnName : "ITEM_CODE"
+                                DataSetIdentifier : Dataset1
+                              FieldId : "itemid"
+                              AggregationFunction : 
+                                SimpleNumericalAggregation : 
+                                  COUNT
+      Permissions:
+        - Actions:
+            - quicksight:RestoreAnalysis
+            - quicksight:UpdateAnalysisPermissions
+            - quicksight:DeleteAnalysis
+            - quicksight:QueryAnalysis
+            - quicksight:DescribeAnalysisPermissions
+            - quicksight:DescribeAnalysis
+            - quicksight:UpdateAnalysis
+          Principal: !Sub
+            - 'arn:aws:quicksight:us-east-1:${AWS::AccountId}:user/default/610131258266'
+            - Account: !Ref 'AWS::AccountId'
+  TRNANA1:
+    Type : AWS::QuickSight::Analysis
+    Properties:
+      AwsAccountId : !Ref 'AWS::AccountId'
+      AnalysisId : "TrnAnalysis-1"
+      Name : "Trn Analysis (Monthly)"
+      Definition :
+        DataSetIdentifierDeclarations :
+          - DataSetArn: !GetAtt DATASETANA1.Arn
+            Identifier : TrnAna1
+        Sheets :
+          - ContentType : INTERACTIVE
+            Name : "TrnAnalysis"
+            SheetId : TrnAna1
+            Title : "Trn Analysis(By months)"
+            Visuals :
+              - PivotTableVisual :
+                  VisualId : "ptVisual"
+                  Title : 
+                    FormatText :
+                      PlainText : "PT1-Analysis"
+                  ChartConfiguration : 
+                    FieldWells :
+                      PivotTableAggregatedFieldWells :
+                        Rows : 
+                          - CategoricalDimensionField :
+                              Column : 
+                                ColumnName : "maindesc"
+                                DataSetIdentifier : TrnAna1
+                              FieldId : "maindescid"
+                          - CategoricalDimensionField :
+                              Column : 
+                                ColumnName : "subdesc"
+                                DataSetIdentifier : TrnAna1
+                              FieldId : "subdescid"
+                        Columns :
+                          - CategoricalDimensionField :
+                              Column : 
+                                ColumnName : "monthyear"
+                                DataSetIdentifier : TrnAna1
+                              FieldId : "monthyearid"
+                        Values :
+                          - NumericalMeasureField :
+                              Column : 
+                                ColumnName : "groupamount"
+                                DataSetIdentifier : TrnAna1
+                              FieldId : "groupamountid"
+                              AggregationFunction : 
+                                SimpleNumericalAggregation : 
+                                  SUM
+                    TotalOptions :
+                      ColumnTotalOptions :
+                        CustomLabel : "Totals"
+                        TotalsVisibility : VISIBLE
+                        TotalAggregationOptions :
+                          - FieldId : "groupamountid"
+                            TotalAggregationFunction :
+                              SimpleTotalAggregationFunction : SUM
+                      RowTotalOptions :
+                        CustomLabel : "Totals"
+                        TotalsVisibility : VISIBLE
+                        TotalAggregationOptions :
+                          - FieldId : "groupamountid"
+                            TotalAggregationFunction :
+                              SimpleTotalAggregationFunction : SUM
+      Permissions:
+        - Actions:
+            - quicksight:RestoreAnalysis
+            - quicksight:UpdateAnalysisPermissions
+            - quicksight:DeleteAnalysis
+            - quicksight:QueryAnalysis
+            - quicksight:DescribeAnalysisPermissions
+            - quicksight:DescribeAnalysis
+            - quicksight:UpdateAnalysis
+          Principal: !Sub
+            - 'arn:aws:quicksight:us-east-1:${AWS::AccountId}:user/default/610131258266'
+            - Account: !Ref 'AWS::AccountId'

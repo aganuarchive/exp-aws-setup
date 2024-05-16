@@ -1,0 +1,231 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  EXPVPC:
+    Type: AWS::EC2::VPC
+    Properties:   
+      CidrBlock : "10.1.0.0/16"
+      EnableDnsSupport : true
+      InstanceTenancy : "default"
+      Tags : 
+        - Key : Name
+          Value : vpc-exp		  
+        - Key : App
+          Value : AgExpense
+  EXPIGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags : 
+        - Key : Name
+          Value : igw-exp
+        - Key : App
+          Value : AgExpense
+  EXPRTMAIN:
+    DependsOn : EXPVPC
+    Type: AWS::EC2::RouteTable
+    Properties:   
+      VpcId : !Ref EXPVPC
+      Tags : 
+        - Key : Name
+          Value : rttable-exp
+        - Key : App
+          Value : AgExpense
+  EXPSUBNET1:
+    DependsOn : EXPRTMAIN
+    Type: AWS::EC2::Subnet
+    Properties:   
+      VpcId : !Ref EXPVPC
+      AvailabilityZone : us-east-1a
+      CidrBlock : "10.1.1.0/24"
+      Tags : 
+        - Key : Name
+          Value : subnet1-exp		  
+        - Key : App
+          Value : AgExpense
+  EXPSUBNET2:
+    DependsOn : EXPRTMAIN
+    Type: AWS::EC2::Subnet
+    Properties:   
+      VpcId : !Ref EXPVPC
+      AvailabilityZone : us-east-1b
+      CidrBlock : "10.1.2.0/24"
+      Tags : 
+        - Key : Name
+          Value : subnet2-exp		  
+        - Key : App
+          Value : AgExpense
+  EXPSUBRTASSOC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId : !Ref EXPRTMAIN
+      SubnetId : !Ref EXPSUBNET1
+  EXPSUBRTASSOC2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId : !Ref EXPRTMAIN
+      SubnetId : !Ref EXPSUBNET2
+  EXPATTACHVPC:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId : !Ref EXPVPC
+      InternetGatewayId : !Ref EXPIGW
+  EXPROUTEIGW:
+    DependsOn: EXPATTACHVPC
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId : !Ref EXPRTMAIN
+      DestinationCidrBlock : "0.0.0.0/0"
+      GatewayId : !Ref EXPIGW
+  EXPVpcEnpointS3:
+    DependsOn: EXPATTACHVPC
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      RouteTableIds : 
+        - !Ref EXPRTMAIN
+      ServiceName : "com.amazonaws.us-east-1.s3"
+      VpcEndpointType : "Gateway"
+      VpcId : !Ref EXPVPC
+  EXPVpcEndpointEC2:
+    DependsOn: EXPATTACHVPC
+    Type: AWS::EC2::InstanceConnectEndpoint
+    Properties:
+      SubnetId : !Ref EXPSUBNET1
+      Tags : 
+        - Key : Name
+          Value : ec2-endpoint-exp		  
+        - Key : App
+          Value : AgExpense
+  EXPVpcEnpointDynamo:
+    DependsOn: EXPATTACHVPC
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      RouteTableIds : 
+        - !Ref EXPRTMAIN
+      ServiceName : "com.amazonaws.us-east-1.dynamodb"
+      VpcEndpointType : "Gateway"
+      VpcId : !Ref EXPVPC
+  EXPRDSSECURITYGROUP:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow all inbound (ingress) and outbound (egress) traffic for port 22
+      GroupName: secgrp-rds
+      VpcId : !Ref EXPVPC
+      Tags : 
+        - Key : Name
+          Value : exp-rds-sg
+        - Key : App
+          Value : AgExpense
+  EXPLAMBDASECURITYGROUP:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Lambda security group
+      GroupName: secgrp-lambda
+      VpcId : !Ref EXPVPC
+      Tags : 
+        - Key : Name
+          Value : exp-lambda-sg
+        - Key : App
+          Value : AgExpense
+  EXPEC2SECURITYGROUP:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: EC2 security group
+      GroupName: secgrp-ec2
+      VpcId : !Ref EXPVPC
+      Tags : 
+        - Key : Name
+          Value : exp-ec2-sg
+        - Key : App
+          Value : AgExpense
+  EXPSGLAMBDAEGRESS:
+    Type : AWS::EC2::SecurityGroupEgress
+    Properties :
+      IpProtocol : TCP
+      DestinationSecurityGroupId : !Ref EXPRDSSECURITYGROUP
+      FromPort : 3306
+      ToPort : 3306
+      GroupId : !Ref EXPLAMBDASECURITYGROUP
+  EXPSGLAMBDAEGRESS2:
+    Type : AWS::EC2::SecurityGroupEgress
+    Properties :
+      IpProtocol : TCP
+      CidrIp : "0.0.0.0/0"
+      FromPort : 80
+      ToPort : 80
+      GroupId : !Ref EXPLAMBDASECURITYGROUP
+  EXPSGLAMBDAEGRESS3:
+    Type : AWS::EC2::SecurityGroupEgress
+    Properties :
+      IpProtocol : TCP
+      CidrIp : "0.0.0.0/0"
+      FromPort : 443
+      ToPort : 443
+      GroupId : !Ref EXPLAMBDASECURITYGROUP
+  EXPSGRDSEGRESS:
+    Type : AWS::EC2::SecurityGroupEgress
+    Properties :
+      CidrIp: 0.0.0.0/0
+      Description: allow all OUTGOING traffic
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65500
+      GroupId : !Ref EXPRDSSECURITYGROUP
+  EXPSGRDSINGRESS:
+    Type : AWS::EC2::SecurityGroupIngress
+    Properties :
+      CidrIp: 0.0.0.0/0
+      Description: allow all INCOMING traffic
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65500
+      GroupId : !Ref EXPRDSSECURITYGROUP
+  EXPSGRDSINGRESS2:
+    Type : AWS::EC2::SecurityGroupIngress
+    Properties :
+      SourceSecurityGroupId : !Ref EXPLAMBDASECURITYGROUP
+      Description: allow all INCOMING traffic
+      IpProtocol: tcp
+      FromPort: 3306
+      ToPort: 3306
+      GroupId : !Ref EXPRDSSECURITYGROUP
+  EXPSGEC2EGRESS:
+    Type : AWS::EC2::SecurityGroupEgress
+    Properties :
+      IpProtocol : "-1"
+      CidrIp : "0.0.0.0/0"
+      FromPort : -1
+      ToPort : -1
+      GroupId : !Ref EXPEC2SECURITYGROUP
+  EXPSGEC2INGRESS:
+    Type : AWS::EC2::SecurityGroupIngress
+    Properties :
+      IpProtocol : "TCP"
+      CidrIp : "0.0.0.0/0"
+      FromPort : 22
+      ToPort : 22
+      GroupId : !Ref EXPEC2SECURITYGROUP
+Outputs:
+      EXPVPCID :
+        Value : !GetAtt EXPVPC.VpcId
+        Export : 
+          Name : "EXP-VPC-ID"
+      EXPSGRDSID :
+        Value : !Ref EXPRDSSECURITYGROUP
+        Export : 
+          Name : "EXP-SG-RDS-ID"
+      EXPSGEC2ID :
+        Value : !Ref EXPEC2SECURITYGROUP
+        Export : 
+          Name : "EXP-SG-EC2-ID"
+      EXPSGLAMBDAID :
+        Value : !Ref EXPLAMBDASECURITYGROUP
+        Export : 
+          Name : "EXP-SG-LAMBDA-ID"
+      EXPSUBNET1ID :
+        Value : !Ref EXPSUBNET1
+        Export : 
+          Name : "EXP-SUBNET1-ID"
+      EXPSUBNET2ID :
+        Value : !Ref EXPSUBNET2
+        Export : 
+          Name : "EXP-SUBNET2-ID"

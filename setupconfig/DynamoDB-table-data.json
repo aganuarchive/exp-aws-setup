@@ -33,6 +33,8 @@
          {"RESKEY":"FN-REGISTERSHOPFILE", "RESNAME" :"registerShopFile", "RESTYPE":"LAMBDA" },
          {"RESKEY":"FN-PROCESSSHOPFILE", "RESNAME" :"processShopFile", "RESTYPE":"LAMBDA" },
          {"RESKEY":"FN-PROCESSTRNQ", "RESNAME" :"processTrnQ", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"FN-CHECKRESOURCEEXPIRY", "RESNAME" :"checkResourceExpiry", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"FN-PROCESSEBEVENT", "RESNAME" :"processEBEvent", "RESTYPE":"LAMBDA" },
          {"RESKEY":"RESTAPI", "RESNAME" :"testapi", "RESTYPE":"RESTAPI" },
          {"RESKEY":"API-RES-FILTERS", "RESNAME" :"filters", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-LOCATIONS", "RESNAME" :"locations", "RESTYPE":"RESTAPIRES" },
@@ -51,6 +53,7 @@
          {"RESKEY":"API-RES-ITEMSBYSEARCHTEXT", "RESNAME" :"itemsBySearchText", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-AWSRSCQUOTAS", "RESNAME" :"awsrscquotas", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-AWSRDSACCOUNTINFO", "RESNAME" :"awsrdsaccountinfo", "RESTYPE":"RESTAPIRES" },
+         {"RESKEY":"API-RES-QSAPI", "RESNAME" :"qsapi", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-FILTERS-LAMBDA", "RESNAME" :"getFilters", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-LOCATIONS-LAMBDA", "RESNAME" :"getLocationsMobile", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-SHOPRATES-LAMBDA", "RESNAME" :"getItemShopRates", "RESTYPE":"LAMBDA" },
@@ -70,7 +73,9 @@
          {"RESKEY":"API-RES-AWSRSCQUOTAS-LAMBDA", "RESNAME" :"api_getAwsRscQuotas", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-AWSRDSACCOUNTINFO-LAMBDA", "RESNAME" :"api_getAwsRdsAccountInfo", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-GETAWSACCOUNTS-LAMBDA", "RESNAME" :"api_getAwsAccounts", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-GETQSAPI-LAMBDA", "RESNAME" :"get-qs-dashboard-url", "RESTYPE":"LAMBDA" },
          {"RESKEY":"S3BUCKET", "RESNAME" :"expnov23store", "RESTYPE":"S3" },
+         {"RESKEY":"QSDS-TRNANA1", "RESNAME" :"DatasetAna1", "RESTYPE":"QSDATASET" },
          {"RESKEY":"DBURL", "RESNAME" :"myexprds-mysqldb-yrcy2heewm8e.cvxmgooynaup.us-east-1.rds.amazonaws.com", "RESTYPE":"RDS" }
       ]
     }

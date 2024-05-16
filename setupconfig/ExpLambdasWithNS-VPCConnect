@@ -35,6 +35,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from processShopFile')
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   REGISTERSHOPFILE:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -80,6 +86,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from processTrnQ')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   GETLOCATIONSMOBILE:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -95,6 +107,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getLocationsMobile')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   GETFILTERS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -110,6 +128,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getFilters')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   APIGETITEM:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -125,6 +149,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_getItem')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   APIUPDATEITEM:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -140,6 +170,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_updateItem')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   APIGETITEMSHOPRATES:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -155,6 +191,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getItemShopRates')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   PROCESSCODEBUILD:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -170,6 +212,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from processCodeBuild')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   PROCESSCODEBUILDTRIGGER:
     Type: "AWS::Lambda::EventSourceMapping"
     Properties:
@@ -191,6 +239,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getCategories')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   GETCOSTCENTRES:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -206,6 +260,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getCostcentres')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   GETSUBITEMS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -221,6 +281,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getSubitems')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   GETMTRANS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -236,6 +302,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getSubitems')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   UPDATEMTRANS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -251,6 +323,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getSubitems')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   APIGETITEMSBYCATEGORY:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -266,6 +344,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from getItemsByCategory')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   SHOPRECEIPTS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -281,6 +365,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from shopReceipts')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   LAMBDAAWSACCOUNTS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -296,6 +386,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_updateAwsAccounts')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   LAMBDAAWSRESOURCES:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -311,6 +407,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_updateAwsResources')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   LAMBDAITEMSBYSEARCHTEXT:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -326,6 +428,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_getItemsBySearchtext')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   LAMBDAAWSRSCQUOTAS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -341,6 +449,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_getAwsRscQuotas')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   LAMBDAAWSRDSACCOUNTINFO:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -356,6 +470,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_getAwsRdsAccountInfo')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   LAMBDAGETAWSACCOUNTS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -371,6 +491,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from api_getAwsAccounts')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   LAMBDACHECKEXPIRY:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -401,6 +527,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from lambda_getqsdashboardurl')			 
+      VpcConfig :
+        SecurityGroupIds :
+          - sg-0d80239c864eb7ea5
+        SubnetIds :
+          - subnet-01e04da45a740b021
+          - subnet-0d4f012d03ba1bd25
   LAMBDAPROCESSEBEVENT:
     Type: "AWS::Lambda::Function"
     Properties: 

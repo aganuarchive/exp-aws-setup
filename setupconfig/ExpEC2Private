@@ -1,0 +1,48 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  SUBNETID1 :
+    Type: String
+    Description: "Private Subnet ID 1"
+Resources:
+  MYEXPEC2 : 
+    Type : "AWS::EC2::Instance"
+    Properties : 
+      ImageId : ami-04b70fa74e45c3917
+      InstanceType : t2.micro
+      SubnetId : !ImportValue "EXP-SUBNET1-ID"
+      SecurityGroupIds:
+        - !ImportValue "EXP-SG-EC2-ID"
+      UserData :
+        Fn::Base64:
+          !Sub | 
+            #!/bin/bash
+            exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+            cd /home/ubuntu
+            mkdir expapp
+            mkdir expbackup
+            mkdir git
+            sudo chmod 777 *
+            cd git
+            git clone https://github.com/aganuarchive/exp-aws-setup.git
+            cd /home/ubuntu/expapp
+            cp -r /home/ubuntu/git/exp-aws-setup/* .
+            sudo chown -R ubuntu: /home/ubuntu/expapp
+            sudo chmod -R 755 /home/ubuntu/expapp
+            sudo apt update
+            sudo apt install dos2unix
+            sudo apt install -y pip
+            sudo apt install mysql-client-core-8.0
+            pip install boto3
+            sudo apt install unzip
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            pip3 install –upgrade awscli
+      Tags : 
+        - Key : Name
+          Value : exp-ec2
+        - Key : App
+          Value : AgExpense
+
+

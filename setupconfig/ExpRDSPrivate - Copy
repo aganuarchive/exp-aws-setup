@@ -1,0 +1,55 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  SUBNETID1 :
+    Type: String
+    Description: "Private Subnet ID 1"
+  SUBNETID2 :
+    Type: String
+    Description: "Private Subnet ID 2"
+Resources : 
+  RDSDBParameterGroup:
+    Type: 'AWS::RDS::DBParameterGroup'
+    Properties:
+      DBParameterGroupName : expparam3
+      Description: CloudFormation Sample MySQL Parameter Group
+      Family: mysql8.0
+      Parameters:
+        log_bin_trust_function_creators: 1
+  RDSSECURITYGROUP:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow all inbound (ingress) and outbound (egress) traffic for port 22
+      GroupName: rdssecuritygroup3
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: allow all inbound traffic
+          IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65500
+  RDSSUBNETGROUP:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription : "RDSSUBNET"
+      SubnetIds : 
+        - !Ref SUBNETID1
+        - !Ref SUBNETID2
+#        - subnet-0d4f012d03ba1bd25
+#        - subnet-01e04da45a740b021
+  MYSQLDB : 
+    Type : AWS::RDS::DBInstance
+    DependsOn :
+      - RDSSECURITYGROUP
+    Properties:
+      DBInstanceClass : db.t3.micro
+      DBName : expdp2
+      Engine : mysql
+      EngineVersion : 8.0
+      MasterUsername : admin
+      MasterUserPassword : ramrao11
+      AllocatedStorage : 10
+      DBParameterGroupName : !Ref RDSDBParameterGroup
+      DBSubnetGroupName : !Ref RDSSUBNETGROUP
+      PubliclyAccessible : false
+      VPCSecurityGroups :
+        - !GetAtt RDSSECURITYGROUP.GroupId
