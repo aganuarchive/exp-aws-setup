@@ -9,24 +9,9 @@ Resources:
     Type : "AWS::S3::Bucket"
     Properties : 
       BucketName : !Ref BUCKETNAME
-#      AccessControl: PublicRead
-#      PublicAccessBlockConfiguration:
-#        BlockPublicAcls: false
-#        BlockPublicPolicy: false
-#        IgnorePublicAcls: false
-#        RestrictPublicBuckets: false
-#  MYBUCKETPOLICY:
-#    Type : "AWS::S3::BucketPolicy"
-#    DependsOn : MYBUCKET4
-#    Properties:
-#      Bucket: !Ref BUCKETNAME
-#      PolicyDocument:
-#        Version : 2012-10-17
-#        Statement:
-#          - Effect : Allow
-#            Action: 
-#              - S3:*
-#            Resource:
-#              - Fn::Join: ["" , [ "arn:aws:s3:::",!Ref BUCKETNAME, "/*"]]
-#              - Fn::Join: ["" , [ "arn:aws:s3:::", !Ref BUCKETNAME]]
-#            Principal: "*"
+      Tags : 
+        - Key : Name
+          Value : exp-s3
+        - Key : App
+          Value : AgExpense
+      

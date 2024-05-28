@@ -37,10 +37,10 @@ Resources:
              print('hello from processShopFile')
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   REGISTERSHOPFILE:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -88,10 +88,10 @@ Resources:
              print('hello from processTrnQ')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   GETLOCATIONSMOBILE:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -109,10 +109,10 @@ Resources:
              print('hello from getLocationsMobile')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   GETFILTERS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -130,10 +130,10 @@ Resources:
              print('hello from getFilters')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   APIGETITEM:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -151,10 +151,10 @@ Resources:
              print('hello from api_getItem')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   APIUPDATEITEM:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -172,10 +172,10 @@ Resources:
              print('hello from api_updateItem')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   APIGETITEMSHOPRATES:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -193,10 +193,10 @@ Resources:
              print('hello from getItemShopRates')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   PROCESSCODEBUILD:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -214,10 +214,10 @@ Resources:
              print('hello from processCodeBuild')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   PROCESSCODEBUILDTRIGGER:
     Type: "AWS::Lambda::EventSourceMapping"
     Properties:
@@ -241,10 +241,10 @@ Resources:
              print('hello from getCategories')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   GETCOSTCENTRES:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -262,10 +262,10 @@ Resources:
              print('hello from getCostcentres')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   GETSUBITEMS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -283,10 +283,10 @@ Resources:
              print('hello from getSubitems')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   GETMTRANS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -304,10 +304,10 @@ Resources:
              print('hello from getSubitems')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   UPDATEMTRANS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -325,10 +325,10 @@ Resources:
              print('hello from getSubitems')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   APIGETITEMSBYCATEGORY:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -346,10 +346,10 @@ Resources:
              print('hello from getItemsByCategory')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   SHOPRECEIPTS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -367,10 +367,10 @@ Resources:
              print('hello from shopReceipts')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   LAMBDAAWSACCOUNTS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -388,10 +388,10 @@ Resources:
              print('hello from api_updateAwsAccounts')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   LAMBDAAWSRESOURCES:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -409,10 +409,10 @@ Resources:
              print('hello from api_updateAwsResources')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   LAMBDAITEMSBYSEARCHTEXT:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -430,10 +430,10 @@ Resources:
              print('hello from api_getItemsBySearchtext')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   LAMBDAAWSRSCQUOTAS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -451,10 +451,10 @@ Resources:
              print('hello from api_getAwsRscQuotas')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   LAMBDAAWSRDSACCOUNTINFO:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -472,10 +472,10 @@ Resources:
              print('hello from api_getAwsRdsAccountInfo')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   LAMBDAGETAWSACCOUNTS:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -493,10 +493,10 @@ Resources:
              print('hello from api_getAwsAccounts')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   LAMBDACHECKEXPIRY:
     Type: "AWS::Lambda::Function"
     Properties: 
@@ -529,10 +529,10 @@ Resources:
              print('hello from lambda_getqsdashboardurl')			 
       VpcConfig :
         SecurityGroupIds :
-          - sg-0d80239c864eb7ea5
+          - !ImportValue "EXP-SG-LAMBDA-ID"
         SubnetIds :
-          - subnet-01e04da45a740b021
-          - subnet-0d4f012d03ba1bd25
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
   LAMBDAPROCESSEBEVENT:
     Type: "AWS::Lambda::Function"
     Properties: 

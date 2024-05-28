@@ -1,16 +1,20 @@
 #Make sure to use spaces and not tabs for indentation
 AWSTemplateFormatVersion: "2010-09-09"
-Parameters:
-  SUBNETID1 :
-    Type: String
-    Description: "Private Subnet ID 1"
 Resources:
+  EXPINSTPROFILE:
+    Type : "AWS::IAM::InstanceProfile"
+    Properties :
+      InstanceProfileName : "ExpInstProfile"
+      Roles : 
+        - !ImportValue "EXPROLEID"
   MYEXPEC2 : 
+    DependsOn : EXPINSTPROFILE
     Type : "AWS::EC2::Instance"
     Properties : 
       ImageId : ami-04b70fa74e45c3917
       InstanceType : t2.micro
       SubnetId : !ImportValue "EXP-SUBNET1-ID"
+      IamInstanceProfile : !Ref "EXPINSTPROFILE"
       SecurityGroupIds:
         - !ImportValue "EXP-SG-EC2-ID"
       UserData :

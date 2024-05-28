@@ -1,0 +1,60 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  EXPSSMSECURITYGROUP:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SSM security group
+      GroupName: secgrp-ssm
+      VpcId : !ImportValue "EXP-VPC-ID"
+      Tags : 
+        - Key : Name
+          Value : exp-ssm-sg
+        - Key : App
+          Value : AgExpense
+  EXPSGSSMINGRESS:
+    Type : AWS::EC2::SecurityGroupIngress
+    Properties :
+      CidrIp: 0.0.0.0/0
+      Description: allow all INCOMING traffic
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65500
+      GroupId : !Ref EXPSSMSECURITYGROUP
+  EXPSGSSMINGRESS2:
+    Type : AWS::EC2::SecurityGroupIngress
+    Properties :
+      CidrIp: 0.0.0.0/0
+      Description: allow all INCOMING traffic
+      IpProtocol: tcp
+      FromPort: 443
+      ToPort: 443
+      GroupId : !Ref EXPSSMSECURITYGROUP
+  EXPSGSSMEGRESS:
+    Type : AWS::EC2::SecurityGroupEgress
+    Properties :
+      IpProtocol : TCP
+      CidrIp : "0.0.0.0/0"
+      FromPort : 0
+      ToPort : 65500
+      GroupId : !Ref EXPSSMSECURITYGROUP
+  EXPVpcEnpointSSM:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName : "com.amazonaws.us-east-1.ssm"
+      VpcEndpointType : "Interface"
+      VpcId : !ImportValue "EXP-VPC-ID"
+      SecurityGroupIds : 
+        - !Ref EXPSSMSECURITYGROUP
+      SubnetIds : 
+        - !ImportValue "EXP-SUBNET1-ID"
+  EXPVpcEnpointEC2Msg:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName : "com.amazonaws.us-east-1.ec2messages"
+      VpcEndpointType : "Interface"
+      VpcId : !ImportValue "EXP-VPC-ID"
+      SecurityGroupIds : 
+        - !Ref EXPSSMSECURITYGROUP
+      SubnetIds : 
+        - !ImportValue "EXP-SUBNET1-ID"

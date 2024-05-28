@@ -20,6 +20,8 @@ Resources:
                 - "ec2.amazonaws.com"
             Action:
               - "sts:AssumeRole"
+      ManagedPolicyArns :
+        - "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       Tags:
         - Key : "Project"
           Value : "Expense"
@@ -50,11 +52,16 @@ Resources:
                    - "dynamodb:GetItem"
                    - "dynamodb:UpdateItem"
                    - "dynamodb:Query"
+                   - "dynamodb:GetRecords",
+                   - "dynamodb:GetShardIterator",
+                   - "dynamodb:DescribeStream",
+                   - "dynamodb:ListStreams",
                    - "sqs:DeleteMessage"
                    - "sqs:GetQueueUrl"
                    - "sqs:GetQueueAttributes"
                    - "sns:ListTopics"
                    - "sns:Publish"
+                   - "sns:ListTagsForResource",
                    - "apigateway:GET"
                    - "codebuild:ListBuilds"
                    - "codebuild:BatchGetBuilds"
@@ -68,6 +75,7 @@ Resources:
                    - "ec2:AssignPrivateIpAddresses"
                    - "ec2:UnassignPrivateIpAddresses"
                    - "events:PutEvents" 
+                   - "ssm:DescribeInstanceAssociationsStatus"
                  Resource: "*"
                - Effect: "Allow"
                  Action:
@@ -124,8 +132,27 @@ Resources:
             Resource: "*"
       Roles:
         - !Ref EXPUSERROLE
+#  EXPINSTPROFILE:
+#    Type : "AWS::IAM::InstanceProfile"
+#    Properties :
+#      InstanceProfileName : "ExpInstProfile"
+#      Roles : 
+#        - !Ref EXPUSERROLE
 Outputs:
    RoleArn:
      Value : !GetAtt EXPUSERROLE.Arn
      Export:
        Name : ROLEARN
+   RoleID:
+#Below logic extracts the role name from role arn
+     Value : !Select 
+               - 1
+               - !Split
+                   - "/"
+                   - !GetAtt EXPUSERROLE.Arn
+     Export:
+       Name : EXPROLEID
+#   InstProfileArn:
+#     Value : !GetAtt EXPINSTPROFILE.InstanceProfileName
+#     Export:
+#       Name : EXPINSTPROFILE
