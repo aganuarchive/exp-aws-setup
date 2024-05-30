@@ -17,6 +17,7 @@ Resources:
                 - "scheduler.amazonaws.com"
                 - "backup.amazonaws.com"
                 - "apigateway.amazonaws.com"
+                - "states.amazonaws.com"
                 - "ec2.amazonaws.com"
             Action:
               - "sts:AssumeRole"

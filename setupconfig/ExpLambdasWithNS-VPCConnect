@@ -563,3 +563,65 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from lambda_checkEIP')			 
+  LAMBDASMSTARTS3FILE:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: sm-start-s3fileupload
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_sm-start-s3fileupload.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from lambda_sm-start-s3fileupload')			 
+  LAMBDAPROCESSDUMPFILE:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: processDumpFile
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_processDumpFile.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from lambda_processDumpFile')			 
+  LAMBDASMDEFAULT:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: sm-default
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_sm-default.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from lambda_sm-default')			 
+Outputs:
+      EXPSMSTARTS3FILE :
+        Value : !GetAtt LAMBDASMSTARTS3FILE.Arn
+        Export : 
+          Name : "EXP-SMSTARTS3FILE-ARN"
+      EXPPROCESSSHOPFILE :
+        Value : !GetAtt processShopFile.Arn
+        Export : 
+          Name : "EXP-PROCESSSHOPFILE-ARN"
+      EXPPROCESSDUMPFILE :
+        Value : !GetAtt LAMBDAPROCESSDUMPFILE.Arn
+        Export : 
+          Name : "EXP-PROCESSDUMPFILE-ARN"
+      EXPSMDEFAULT :
+        Value : !GetAtt LAMBDASMDEFAULT.Arn
+        Export : 
+          Name : "EXP-SMDEFAULT-ARN"

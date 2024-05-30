@@ -1,0 +1,59 @@
+---
+Metadata:
+  TemplateId: "arn:aws:cloudformation:us-east-1:642526210459:generatedTemplate/7a916814-ce49-401b-8d37-6e069224efb8"
+Resources:
+  LambdaEventSourceMapping00fbd29eb5cbfc4a2fa7524197da3da6c000C7WTq:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::EventSourceMapping"
+    DeletionPolicy: "Retain"
+    Properties:
+      StartingPosition: "LATEST"
+      BatchSize: 1
+      FunctionName: "arn:aws:lambda:us-east-1:642526210459:function:rdsImportState"
+      TumblingWindowInSeconds: 0
+      MaximumRetryAttempts: -1
+      BisectBatchOnFunctionError: false
+      ParallelizationFactor: 1
+      MaximumRecordAgeInSeconds: -1
+      Enabled: true
+      EventSourceArn:
+        Fn::GetAtt:
+        - "DynamoDBTable00EXPFLAGS00Yl4MJ"
+        - "StreamArn"
+      MaximumBatchingWindowInSeconds: 0
+  DynamoDBTable00EXPFLAGS00Yl4MJ:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::DynamoDB::Table"
+    DeletionPolicy: "Retain"
+    Properties:
+      SSESpecification:
+        SSEEnabled: false
+      TableName: "EXPFLAGS"
+      AttributeDefinitions:
+      - AttributeType: "S"
+        AttributeName: "FLAGNAME"
+      StreamSpecification:
+        StreamViewType: "NEW_AND_OLD_IMAGES"
+        ResourcePolicy:
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+            - Resource: "arn:aws:dynamodb:us-east-1:642526210459:table/EXPFLAGS/stream/2024-05-28T14:18:54.725"
+              Action: "dynamodb:*"
+              Effect: "Allow"
+              Principal:
+                AWS: "arn:aws:iam::642526210459:role/ExpUserRole"
+              Sid: "Statement1"
+      ContributorInsightsSpecification:
+        Enabled: false
+      BillingMode: "PAY_PER_REQUEST"
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      KeySchema:
+      - KeyType: "HASH"
+        AttributeName: "FLAGNAME"
+      DeletionProtectionEnabled: false
+      TableClass: "STANDARD"
+      Tags: []
+      TimeToLiveSpecification:
+        Enabled: false

@@ -35,6 +35,7 @@
          {"RESKEY":"FN-PROCESSTRNQ", "RESNAME" :"processTrnQ", "RESTYPE":"LAMBDA" },
          {"RESKEY":"FN-CHECKRESOURCEEXPIRY", "RESNAME" :"checkResourceExpiry", "RESTYPE":"LAMBDA" },
          {"RESKEY":"FN-PROCESSEBEVENT", "RESNAME" :"processEBEvent", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"FN-RDSIMPORTSTATE", "RESNAME" :"rdsImportState", "RESTYPE":"LAMBDA" },
          {"RESKEY":"RESTAPI", "RESNAME" :"testapi", "RESTYPE":"RESTAPI" },
          {"RESKEY":"API-RES-FILTERS", "RESNAME" :"filters", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"API-RES-LOCATIONS", "RESNAME" :"locations", "RESTYPE":"RESTAPIRES" },

@@ -1,0 +1,52 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources : 
+  NSEXPROLE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "EXP-USER-ROLE"
+        RSCTYPE: "NAME;ARN"
+  EXPSTATEMACHINE:
+    Type: "AWS::StepFunctions::StateMachine"
+    Properties:
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      StateMachineName : exp-sm
+      StateMachineType : "STANDARD"
+      Definition :
+        StartAt : "FirstState"
+        States : 
+          FirstState : 
+            Type : "Task"
+            Resource : !ImportValue "EXP-SMSTARTS3FILE-ARN"
+            Next : "CheckFileType"
+          CheckFileType:
+            Type : "Choice"
+            Choices :
+              - Variable : '$.ResultPath.filetype'
+                StringEquals : "DUMPFILE"
+                Next : "DumpFileState"
+              - Variable : '$.ResultPath.filetype'
+                StringEquals : "SHOPFILE"
+                Next : "ShopFileState"
+            Default : "DefaultState"
+          DumpFileState :   
+            Type : "Task"
+            Resource : !ImportValue "EXP-PROCESSDUMPFILE-ARN"
+            End : true
+          ShopFileState :   
+            Type : "Task"
+            Resource : !ImportValue "EXP-PROCESSSHOPFILE-ARN"
+            End : true
+          DefaultState :   
+            Type : "Task"
+            Resource : !ImportValue "EXP-SMDEFAULT-ARN"
+            End : true
+      Tags:
+        - Key: "Name"
+          Value: "exp-sm"
+        - Key: "App"
+          Value: "AgExpense"
