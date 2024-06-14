@@ -1,0 +1,18 @@
+FROM 891377212651.dkr.ecr.us-east-1.amazonaws.com/agep245priv:lambdasmall.1
+
+ARG FUNCTION_DIR="/myfunction"
+
+# Copy requirements.txt
+#COPY DUMP.sql /myfunction/.
+
+WORKDIR ${FUNCTION_DIR}
+
+# Copy in the built dependencies
+#COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
+
+ENTRYPOINT [ "/usr/bin/python3", "-m", "awslambdaric" ]
+# Copy function code
+COPY lambda_function.py /myfunction/.
+
+# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+CMD [ "lambda_function.handler" ]
