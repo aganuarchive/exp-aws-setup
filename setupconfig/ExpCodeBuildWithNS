@@ -478,7 +478,7 @@ Resources:
         BuildSpec : "buildcheckEIP.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
-  CBSMFUNCTIONS:
+  CBSMS3FILEUPLOAD:
     Type: AWS::CodeBuild::Project
     Properties:   
       Artifacts:
@@ -488,12 +488,12 @@ Resources:
         Image: "aws/codebuild/standard:5.0"
         ImagePullCredentialsType: CODEBUILD
         Type: LINUX_CONTAINER
-      Name: CB-SM-FUNCTIONS
+      Name: CB-SM-START-S3-FILE-UPLOAD
       ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
       Source:
         Auth:
           Type: OAUTH
-        BuildSpec : "buildSM-functions.yml"
+        BuildSpec : "buildSMStartS3FileUpload.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
   CBPROCESSDUMPFILE:
@@ -530,5 +530,41 @@ Resources:
         Auth:
           Type: OAUTH
         BuildSpec : "buildSM-default.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBCHECKSMTRANSITIONS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-CHECK-SM-TRANSITIONS
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildCheckSMTransitions.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBPROCESSEMAIL:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-PROCESSEMAIL
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildProcessEmail.yml"
         Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB

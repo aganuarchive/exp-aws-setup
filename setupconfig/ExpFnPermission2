@@ -1,0 +1,52 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources : 
+  SMDEFAULTPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !ImportValue "EXP-SMDEFAULT-ARN"
+      Principal : events.amazonaws.com
+      SourceArn : !ImportValue "EXP-FILEPROCESSRULE-ARN"
+  PROCESSSHOPFILEPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !ImportValue "EXP-PROCESSSHOPFILE-ARN"
+      Principal : events.amazonaws.com
+      SourceArn : !ImportValue "EXP-EXPSHOPFILERULE-ARN"
+  PROCESSDUMPFILEPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !ImportValue "EXP-PROCESSDUMPFILE-ARN"
+      Principal : events.amazonaws.com
+      SourceArn : !ImportValue "EXP-EXPDUMPFILERULE-ARN"
+  STARTS3FILEUPLOADPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !ImportValue "EXP-SMSTARTS3FILE-ARN"
+      Principal : events.amazonaws.com
+      SourceArn : !ImportValue "EXP-EXPS3RULE-ARN"
+  SMTRANSITIONPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !ImportValue "EXP-SMTRANSITIONS-ARN"
+      Principal : events.amazonaws.com
+      SourceArn : !ImportValue "EXP-EXPS3RULE-ARN"
+  PROCESSEMAILPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !ImportValue "EXP-PROCESSEMAIL-ARN"
+      Principal : events.amazonaws.com
+      SourceArn : !ImportValue "EXP-PROCESSEMAILRULE-ARN"
+  PROCESSEMAILPERM2 : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !ImportValue "EXP-PROCESSEMAIL-ARN"
+      Principal : lambda.amazonaws.com
+      SourceArn : !ImportValue "EXP-PROCESSCODEBUILD-ARN"

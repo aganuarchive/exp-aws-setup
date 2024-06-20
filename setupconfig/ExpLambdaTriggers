@@ -1,0 +1,9 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources : 
+  EICPROCESSCODEBUILD : 
+    Type: "AWS::Lambda::EventSourceMapping"
+    Properties:
+      #EventSourceArn : !ImportValue "EXP-PROCESSEMAILRULE-ARN"
+      EventSourceArn : "arn:aws:events:us-east-1:891377212651:rule/process-email-rule"
+      FunctionName : !ImportValue "EXP-PROCESSEMAIL-ID"

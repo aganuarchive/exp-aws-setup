@@ -46,3 +46,124 @@ Resources:
         - Id : "eb-central"
           Arn: "arn:aws:events:us-east-1:080349858544:event-bus/eb-central"
           RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN 
+  EXPS3RULE:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : "s3-file-upload-rule"
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+#      RoleArn : "arn:aws:iam::637423170774:role/ExpUserRole"
+      EventBusName : "default"
+      EventPattern:
+        source:
+          - aws.s3
+        detail-type:
+          - Object Created
+      Targets:
+        - Id : !ImportValue "EXP-SMTRANSITIONS-ID"
+          Arn: !ImportValue "EXP-SMTRANSITIONS-ARN"
+  EXPFILEPROCESSRULE:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : "s3-file-process-rule"
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      EventBusName : "default"
+      State : DISABLED
+      EventPattern:
+        source:
+          - lambda_checkSMTransitions
+        detail-type:
+          - transition_event
+      Targets:
+        - Id : !ImportValue "EXP-SMDEFAULT-ID"
+          Arn: !ImportValue "EXP-SMDEFAULT-ARN"
+  EXPSHOPFILERULE:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : "shopfile-process-rule"
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      EventBusName : "default"
+      EventPattern:
+        source:
+          - lambda_checkSMTransitions
+        detail-type:
+          - transition_event
+        detail :
+          evtype :
+            - "LAMBDA"
+          filetype :
+            - "SHOPFILE"
+      Targets:
+        - Id : !ImportValue "EXP-PROCESSSHOPFILE-ID"
+          Arn: !ImportValue "EXP-PROCESSSHOPFILE-ARN"
+  EXPDUMPFILERULE:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : "dumpfile-process-rule"
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      EventBusName : "default"
+      EventPattern:
+        source:
+          - lambda_checkSMTransitions
+        detail-type:
+          - transition_event
+        detail :
+          evtype :
+            - "LAMBDA"
+          filetype :
+            - "DUMPFILE"
+      Targets:
+        - Id : !ImportValue "EXP-PROCESSDUMPFILE-ID"
+          Arn: !ImportValue "EXP-PROCESSDUMPFILE-ARN"
+  EXPFILEPROCESSSM:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : "file-process-sm-rule"
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      EventBusName : "default"
+      EventPattern:
+        source:
+          - lambda_checkSMTransitions
+        detail-type:
+          - transition_event
+        detail :
+          evtype :
+            - "STEPFN"
+      Targets:
+        - Id : !ImportValue "EXP-EXPSTATEMACHINE-ID"
+          Arn: !ImportValue "EXP-EXPSTATEMACHINE-ARN"
+          RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN 
+  EXPPROCESSEMAIL:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : "process-email-rule"
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      EventBusName : "default"
+      EventPattern:
+        source:
+          - processEmail
+        detail-type:
+          - email_event
+      Targets:
+        - Id : !ImportValue "EXP-PROCESSEMAIL-ID"
+          Arn: !ImportValue "EXP-PROCESSEMAIL-ARN"
+Outputs:
+      EXPFILEPROCESSRULEARN :
+        Value : !GetAtt EXPFILEPROCESSRULE.Arn
+        Export : 
+          Name : "EXP-FILEPROCESSRULE-ARN"
+      EXPSHOPFILERULEARN :
+        Value : !GetAtt EXPSHOPFILERULE.Arn
+        Export : 
+          Name : "EXP-EXPSHOPFILERULE-ARN"
+      EXPDUMPFILERULEARN :
+        Value : !GetAtt EXPDUMPFILERULE.Arn
+        Export : 
+          Name : "EXP-EXPDUMPFILERULE-ARN"
+      EXPS3RULEARN :
+        Value : !GetAtt EXPS3RULE.Arn
+        Export : 
+          Name : "EXP-EXPS3RULE-ARN"
+      EXPEMAILRULEARN :
+        Value : !GetAtt EXPPROCESSEMAIL.Arn
+        Export : 
+          Name : "EXP-PROCESSEMAILRULE-ARN"

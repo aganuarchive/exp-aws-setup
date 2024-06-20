@@ -212,12 +212,12 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from processCodeBuild')			 
-      VpcConfig :
-        SecurityGroupIds :
-          - !ImportValue "EXP-SG-LAMBDA-ID"
-        SubnetIds :
-          - !ImportValue "EXP-SUBNET1-ID"
-          - !ImportValue "EXP-SUBNET2-ID"
+#      VpcConfig :
+#        SecurityGroupIds :
+#          - !ImportValue "EXP-SG-LAMBDA-ID"
+#        SubnetIds :
+#          - !ImportValue "EXP-SUBNET1-ID"
+#          - !ImportValue "EXP-SUBNET2-ID"
   PROCESSCODEBUILDTRIGGER:
     Type: "AWS::Lambda::EventSourceMapping"
     Properties:
@@ -608,7 +608,41 @@ Resources:
         ZipFile: |
            def lambda_handler(event, context):
              print('hello from lambda_sm-default')			 
+  LAMBDACHECKSMTRANSITIONS:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: checkSMTransitions
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_checkSMTransitions.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from lambda_checkSMTransitions')			 
+  LAMBDAPROCESSEMAIL:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: lambda_processEmail
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Timeout : 300
+      Handler: lambda_processEmail.lambda_handler
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from lambda_processEmail')			 
 Outputs:
+      EXPSMSTARTS3FILEID :
+        Value : !Ref LAMBDASMSTARTS3FILE
+        Export : 
+          Name : "EXP-SMSTARTS3FILE-ID"
       EXPSMSTARTS3FILE :
         Value : !GetAtt LAMBDASMSTARTS3FILE.Arn
         Export : 
@@ -617,11 +651,47 @@ Outputs:
         Value : !GetAtt processShopFile.Arn
         Export : 
           Name : "EXP-PROCESSSHOPFILE-ARN"
+      EXPPROCESSSHOPFILEID :
+        Value : !Ref processShopFile
+        Export : 
+          Name : "EXP-PROCESSSHOPFILE-ID"
       EXPPROCESSDUMPFILE :
         Value : !GetAtt LAMBDAPROCESSDUMPFILE.Arn
         Export : 
           Name : "EXP-PROCESSDUMPFILE-ARN"
+      EXPPROCESSDUMPFILEID :
+        Value : !Ref LAMBDAPROCESSDUMPFILE
+        Export : 
+          Name : "EXP-PROCESSDUMPFILE-ID"
       EXPSMDEFAULT :
         Value : !GetAtt LAMBDASMDEFAULT.Arn
         Export : 
           Name : "EXP-SMDEFAULT-ARN"
+      EXPSMDEFAULTID :
+        Value : !Ref LAMBDASMDEFAULT
+        Export : 
+          Name : "EXP-SMDEFAULT-ID"
+      EXPSMTRANSITIONS :
+        Value : !GetAtt LAMBDACHECKSMTRANSITIONS.Arn
+        Export : 
+          Name : "EXP-SMTRANSITIONS-ARN"
+      EXPSMTRANSITIONSID :
+        Value : !Ref LAMBDACHECKSMTRANSITIONS
+        Export : 
+          Name : "EXP-SMTRANSITIONS-ID"
+      EXPPROCESSEMAIL :
+        Value : !GetAtt LAMBDAPROCESSEMAIL.Arn
+        Export : 
+          Name : "EXP-PROCESSEMAIL-ARN"
+      EXPPROCESSEMAILID :
+        Value : !Ref LAMBDAPROCESSEMAIL
+        Export : 
+          Name : "EXP-PROCESSEMAIL-ID"
+      EXPPROCESSCODEBUILD :
+        Value : !GetAtt PROCESSCODEBUILD.Arn
+        Export : 
+          Name : "EXP-PROCESSCODEBUILD-ARN"
+      EXPPROCESSCODEBUILDID :
+        Value : !Ref PROCESSCODEBUILD
+        Export : 
+          Name : "EXP-PROCESSCODEBUILD-ID"

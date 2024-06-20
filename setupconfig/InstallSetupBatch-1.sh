@@ -11,10 +11,12 @@ if [ $result -ne 0 ]; then
   exit
 fi
 
-aws cloudformation create-stack --stack-name myexpdynamo --template-body file://./ExpDynamoScript  
+aws cloudformation create-stack --stack-name myexpdynamo --template-body file://./ExpDynamoScript  --capabilities CAPABILITY_AUTO_EXPAND 
 aws cloudformation wait stack-create-complete --stack-name myexpdynamo
 
-python3.8 processDynamoDBConfig.py
+aws cloudformation create-stack --stack-name myexpdynamo2 --template-body file://./ExpDynamoScript2  --capabilities CAPABILITY_AUTO_EXPAND 
+
+python C:\Applications\PythonApps\awstest\venv\processDynamoDBConfig.py
 
 
 aws cloudformation create-stack --stack-name myexps3NS --template-body file://./ExpS3Script   --parameters ParameterKey=BUCKETNAME,ParameterValue=$1 --capabilities CAPABILITY_AUTO_EXPAND
@@ -29,11 +31,14 @@ aws cloudformation create-stack --stack-name myexpcodebuild --template-body file
 aws cloudformation wait stack-create-complete --stack-name myexpcodebuild
 
 aws s3 cp stacks s3://$1/stacks --recursive
+aws s3 cp docker s3://$1/docker --recursive
 
-python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-LAMBDALAYERS')"
-python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-UPDATEFNLAYERS')"
-python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-CUSTOMFNSNS')"
-python3.8 -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-FNMACROS3')"
+
+python -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-LAMBDALAYERS')"
+python -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-UPDATEFNLAYERS')"
+python -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-CUSTOMFNSNS')"
+python -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-FNMACRO2')"
+python -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-FNMACROS3')"
 aws lambda invoke --function-name updateFnLayers fn.log
 
 #aws s3 cp stacks s3://$1/stacks --recursive
