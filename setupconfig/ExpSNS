@@ -51,6 +51,11 @@ Resources :
       Subscription :
         - Endpoint : !GetAtt NSTOPICEMAILADDR.Outputs.RSCID
           Protocol : email
+      Tags :
+        - Key : "App"
+          Value: "AgExpense"
+        - Key : "TopicType"
+          Value: "status-email"
   RDSIMPORTTOPICEMAIL : 
     Type : AWS::SNS::Topic
     Properties:

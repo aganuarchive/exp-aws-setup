@@ -1,7 +1,7 @@
 #Make sure to use spaces and not tabs for indentation
 AWSTemplateFormatVersion: "2010-09-09"
 Resources:
-  LAMBDARDSIMPORTSTATE:
+  LAMBDAGETRECENTITEMS:
     Type: AWS::CodeBuild::Project
     Properties:   
       Artifacts:
@@ -11,17 +11,17 @@ Resources:
         Image: "aws/codebuild/standard:5.0"
         ImagePullCredentialsType: CODEBUILD
         Type: LINUX_CONTAINER
-      Name: CB-RDSIMPORTSTATE
+      Name: CB-GETRECENTITEMS
       ServiceRole: 
           Fn::ImportValue:
             ROLEARN
       Source:
         Auth:
           Type: OAUTH
-        BuildSpec : "buildRdsImportState.yml"
-        Location: "https://github.com/aganuarchive/aws-lambdas-nodejs.git"  
+        BuildSpec : "buildGetRecentShopItems.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB
-  LAMBDAAWSRESOURCESTATE:
+  LAMBDACHECKRDSIMPORT:
     Type: AWS::CodeBuild::Project
     Properties:   
       Artifacts:
@@ -31,13 +31,13 @@ Resources:
         Image: "aws/codebuild/standard:5.0"
         ImagePullCredentialsType: CODEBUILD
         Type: LINUX_CONTAINER
-      Name: CB-AWSRESOURCESTATE
+      Name: CB-CHECKRDSIMPORT
       ServiceRole: 
           Fn::ImportValue:
             ROLEARN
       Source:
         Auth:
           Type: OAUTH
-        BuildSpec : "buildAwsResourceState.yml"
-        Location: "https://github.com/aganuarchive/aws-lambdas-nodejs.git"  
+        BuildSpec : "buildCheckRdsImport.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
         Type : GITHUB

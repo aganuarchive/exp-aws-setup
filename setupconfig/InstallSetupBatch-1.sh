@@ -32,6 +32,7 @@ aws cloudformation wait stack-create-complete --stack-name myexpcodebuild
 
 aws s3 cp stacks s3://$1/stacks --recursive
 aws s3 cp docker s3://$1/docker --recursive
+aws s3 cp rdsimport s3://$1/rdsimport --recursive
 
 
 python -c "import processDynamoDBConfig ; processDynamoDBConfig.startCodeBuild('CB-LAMBDALAYERS')"

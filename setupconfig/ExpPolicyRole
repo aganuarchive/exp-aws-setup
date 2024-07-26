@@ -57,6 +57,7 @@ Resources:
                    - "dynamodb:GetShardIterator"
                    - "dynamodb:DescribeStream"
                    - "dynamodb:ListStreams"
+                   - "dynamodb:Scan"
                    - "sqs:DeleteMessage"
                    - "sqs:GetQueueUrl"
                    - "sqs:GetQueueAttributes"

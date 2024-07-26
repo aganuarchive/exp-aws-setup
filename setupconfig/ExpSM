@@ -36,10 +36,25 @@ Resources :
           DumpFileState :   
             Type : "Task"
             Resource : !ImportValue "EXP-PROCESSDUMPFILE-ARN"
-            End : true
+            Next : "CheckRdsImportState"
           ShopFileState :   
             Type : "Task"
             Resource : !ImportValue "EXP-PROCESSSHOPFILE-ARN"
+            End : true
+          CheckRdsImportState :   
+            Type : "Task"
+            Resource : !ImportValue "EXP-checkRdsImport-ARN"
+            Next : "EventBusState"
+          EventBusState :   
+            Type : "Task"
+            Resource : "arn:aws:states:::events:putEvents"
+            Parameters : 
+              Entries :
+                - DetailType : "email_event"
+                  Source : "processEmail"
+                  Detail :
+                    "evtype": "EMAIL"
+                    "msg.$" : "$.detail.msg"
             End : true
           DefaultState :   
             Type : "Task"
@@ -50,3 +65,12 @@ Resources :
           Value: "exp-sm"
         - Key: "App"
           Value: "AgExpense"
+Outputs:
+      EXPSMOUT :
+        Value : !GetAtt EXPSTATEMACHINE.Arn
+        Export : 
+          Name : "EXP-EXPSTATEMACHINE-ARN"
+      EXPSMID :
+        Value : !GetAtt EXPSTATEMACHINE.Name
+        Export : 
+          Name : "EXP-EXPSTATEMACHINE-ID"

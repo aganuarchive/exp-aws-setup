@@ -1,0 +1,120 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSEXPROLE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "EXP-USER-ROLE"
+        RSCTYPE: "NAME;ARN"
+  CBAWSACCOUNTS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-UPDATEAWSACCOUNTS
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildUpdateAwsAccounts.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBAWSRESOURCES:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-UPDATEAWSRESOURCES
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildUpdateAwsResources.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBAWSRDSACCOUNTINFO:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETAWSRDSACCOUNTINFO
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildGetAwsRdsAccountInfo.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBAWSACCOUNTS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETAWSACCOUNTS
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildGetAwsAccounts.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBAWSRSCQUOTAS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-GETAWSRSCQUOTAS
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildGetAwsRscQuotas.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB
+  CBUPDATEAWSACCOUNTS:
+    Type: AWS::CodeBuild::Project
+    Properties:   
+      Artifacts:
+        Type : NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/standard:5.0"
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: CB-UPDATEAWSACCOUNTS
+      ServiceRole: !GetAtt NSEXPROLE.Outputs.RSCARN
+      Source:
+        Auth:
+          Type: OAUTH
+        BuildSpec : "buildUpdateAwsAccounts.yml"
+        Location: "https://github.com/aganuarchive/aws-lambda.git"  
+        Type : GITHUB

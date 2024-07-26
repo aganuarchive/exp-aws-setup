@@ -51,11 +51,20 @@ aws cloudformation wait stack-create-complete --stack-name myexpapi2
 aws cloudformation create-stack --stack-name myexpapifnp --template-body file://./ExpApiFnPermission   --capabilities CAPABILITY_AUTO_EXPAND             
 aws cloudformation wait stack-create-complete --stack-name myexpapifnp
 
-aws cloudformation create-stack --stack-name ExpCodeBuildNodeJS --template-body file://./ExpCodeBuildNodeJS   --capabilities CAPABILITY_AUTO_EXPAND    
-
 aws cloudformation create-stack --stack-name ExpLambdasNodeJS --template-body file://./ExpLambdasNodeJS   --capabilities CAPABILITY_AUTO_EXPAND    
 
+aws cloudformation create-stack --stack-name ExpCodeBuildNodeJS --template-body file://./ExpCodeBuildNodeJS   --capabilities CAPABILITY_AUTO_EXPAND    
+
 aws cloudformation create-stack --stack-name ExpFnPermission2 --template-body file://./ExpFnPermission2  --capabilities CAPABILITY_AUTO_EXPAND             
+
+aws cloudformation create-stack --stack-name ExpLambdas2 --template-body file://./ExpLambdas2  --capabilities CAPABILITY_AUTO_EXPAND             
+aws cloudformation create-stack --stack-name ExpLambdas3 --template-body file://./ExpLambdas3  --capabilities CAPABILITY_AUTO_EXPAND             
+aws cloudformation create-stack --stack-name ExpCodeBuild2 --template-body file://./ExpCodeBuild2   --capabilities CAPABILITY_AUTO_EXPAND    
+
+aws cloudformation create-stack --stack-name expapi3 --template-body file://./ExpApi-CORS3  --capabilities CAPABILITY_AUTO_EXPAND           
+aws cloudformation wait stack-create-complete --stack-name expapi3
+
+aws cloudformation create-stack --stack-name ExpApiFnPermission2 --template-body file://./ExpApiFnPermission2   --capabilities CAPABILITY_AUTO_EXPAND    
 
 aws lambda invoke --function-name updateFnLayers fn.log
 

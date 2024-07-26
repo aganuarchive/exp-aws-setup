@@ -75,10 +75,29 @@
          {"RESKEY":"API-RES-AWSRDSACCOUNTINFO-LAMBDA", "RESNAME" :"api_getAwsRdsAccountInfo", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-GETAWSACCOUNTS-LAMBDA", "RESNAME" :"api_getAwsAccounts", "RESTYPE":"LAMBDA" },
          {"RESKEY":"API-RES-GETQSAPI-LAMBDA", "RESNAME" :"get-qs-dashboard-url", "RESTYPE":"LAMBDA" },
+         {"RESKEY":"API-RES-RECENTITEMS", "RESNAME" :"recentShopItems", "RESTYPE":"RESTAPIRES" },
          {"RESKEY":"S3BUCKET", "RESNAME" :"expnov23store", "RESTYPE":"S3" },
          {"RESKEY":"QSDS-TRNANA1", "RESNAME" :"DatasetAna1", "RESTYPE":"QSDATASET" },
          {"RESKEY":"DBURL", "RESNAME" :"myexprds-mysqldb-yrcy2heewm8e.cvxmgooynaup.us-east-1.rds.amazonaws.com", "RESTYPE":"RDS" }
       ]
+    },
+    {
+      "Table": "EXPAPP-PARAMS",
+      "Data": [
+         {"PARAMNAME":"SM-TRANSITIONS", "PARAMTYPE" : "LIMIT-MAX", "PARAMVALUE" :"100" },
+         {"PARAMNAME":"SM-SELECT-FILTER", "PARAMTYPE" :"FILTER-TAG", "PARAMVALUE" : "{'tagname' : 'Name','tagvalue':'exp-sm'}"}
+      ]
+    },
+    {
+      "Table": "AWS-RSC-QUOTAS",
+      "Data": [
+         {"RESOURCETYPE":"ACCOUNT", "EXPIRYINDAYS" :"365", "QUANTITY" :"999" },
+         {"RESOURCETYPE":"EC2", "EXPIRYINDAYS" :"365", "QUANTITY" :"999" },
+         {"RESOURCETYPE":"RDS", "EXPIRYINDAYS" :"365", "QUANTITY" :"999" },
+         {"RESOURCETYPE":"CODEBUILD", "EXPIRYINDAYS" :"30", "QUANTITY" :"100" },
+         {"RESOURCETYPE":"QuickSight", "EXPIRYINDAYS" :"30", "QUANTITY" :"100" }
+      ]
     }
+	
   ]
 }

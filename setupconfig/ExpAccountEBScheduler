@@ -75,7 +75,7 @@ Resources:
           - transition_event
       Targets:
         - Id : !ImportValue "EXP-SMDEFAULT-ID"
-          Arn: !ImportValue "EXP-SMDEFAULT-ARN"
+          Arn: !ImportValue "EXP-SMTRANSITIONS-ARN"
   EXPSHOPFILERULE:
     Type: AWS::Events::Rule
     Properties:   

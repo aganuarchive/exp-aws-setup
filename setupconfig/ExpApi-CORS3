@@ -1,0 +1,95 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources : 
+  NSAPI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "RESTAPI"
+        RSCTYPE: "NAME;URI-GET"
+  NSAPIROOTID:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacro2
+      Parameters:
+        RSCKEY: "RESTAPI"
+        RSCTYPE: "NAME;ROOTID"
+
+##### Setup for recentshopitems
+  NSAPIRESRECENTITEMS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "API-RES-RECENTITEMS"
+        RSCTYPE: "NAME"
+  TESTAPIRECENTITEMS : 
+    Type : AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
+      ParentId: !GetAtt NSAPIROOTID.Outputs.RSCINTID
+      PathPart: !GetAtt NSAPIRESRECENTITEMS.Outputs.RSCID
+  TESTAPIRECENTITEMSM : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
+      ResourceId: !Ref TESTAPIRECENTITEMS
+      HttpMethod: GET
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : AWS
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !ImportValue EXP-recentShopItems-ARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior : WHEN_NO_TEMPLATES
+        RequestTemplates :
+            "application/json" : "{ \"locationid\": \"$input.params('locationid')\" }"
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      RequestParameters :
+          method.request.querystring.locationid : true
+      AuthorizationType : NONE
+  TESTAPIRECENTITEMS2M : 
+    Type : AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !GetAtt NSAPI.Outputs.RSCINTID
+      ResourceId: !Ref TESTAPIRECENTITEMS
+      HttpMethod: OPTIONS
+      Integration : 
+        IntegrationHttpMethod : POST
+        Type : MOCK
+        Uri : !Join ["", ["arn:aws:apigateway:",{Ref: "AWS::Region"}, ":lambda:path/2015-03-31/functions/", !ImportValue EXP-recentShopItems-ARN, "/invocations" ]]
+        IntegrationResponses :
+          - StatusCode : 200
+            ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+#            ResponseTemplates:
+#              application/json: "''"
+        PassthroughBehavior: WHEN_NO_MATCH
+      MethodResponses :
+        - ResponseParameters :
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods : "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+          StatusCode : 200
+          ResponseModels:
+              application/json: 'Empty'
+      AuthorizationType : NONE	  
+

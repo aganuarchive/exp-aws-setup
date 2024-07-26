@@ -1,0 +1,28 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSEXPROLE:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+#      TemplateURL: https://expfeb2023store.s3.amazonaws.com/stacks/NSResourceInfo
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "EXP-USER-ROLE"
+        RSCTYPE: "NAME;ARN"
+  importDumpFile:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: importDumpFile
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Handler: lambda_importDumpFile.lambda_handler
+      Timeout : 300
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from importDumpFile')

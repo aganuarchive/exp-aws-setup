@@ -10,15 +10,6 @@ Resources :
       Parameters:
         RSCKEY: "EXP-USER-ROLE"
         RSCTYPE: "NAME;ARN"
-  NSRDSIMPORTSTATELAMBDA:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL:
-        Fn::Transform:
-          Name: fnMacroS3
-      Parameters:
-        RSCKEY: "FN-RDSIMPORTSTATE"
-        RSCTYPE: "NAME"
   TRNHEADER : 
     Type : AWS::DynamoDB::Table
     Properties:
@@ -107,51 +98,15 @@ Resources :
               ProjectionType : "ALL"
       TableName : "RESTABLE"
       BillingMode: PAY_PER_REQUEST	  
-  AWSRESOURCES : 
+  EXPAPPPARAMS : 
     Type : AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions: 
-        - 
-          AttributeName: "RESOURCE-ARN"
+        - AttributeName: "PARAMNAME"
           AttributeType: "S"
       KeySchema: 
         - 
-          AttributeName: "RESOURCE-ARN"
+          AttributeName: "PARAMNAME"
           KeyType: "HASH"
-      TableName : "AWS-RESOURCES"
+      TableName : "EXPAPP-PARAMS"
       BillingMode: PAY_PER_REQUEST	  
-  EXPAPPFLAGS : 
-    Type : AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions: 
-        - AttributeName: "FLAGNAME"
-          AttributeType: "S"
-      KeySchema: 
-        - 
-          AttributeName: "FLAGNAME"
-          KeyType: "HASH"
-      TableName : "EXPAPP-FLAGS"
-      BillingMode: PAY_PER_REQUEST	  
-      StreamSpecification :
-        StreamViewType : NEW_AND_OLD_IMAGES
-        ResourcePolicy :
-          PolicyDocument :
-             Statement : 
-                Sid : "stmt1"
-                Effect : "Allow"
-                Principal : 
-                  "AWS" : !GetAtt NSEXPROLE.Outputs.RSCARN
-                Action : "dynamodb:*"
-                Resource : "*"
-  EXPAPPGLAGSTRIGGER:
-    Type: "AWS::Lambda::EventSourceMapping"
-    Properties:
-      StartingPosition: "LATEST"
-      BatchSize : 1
-      EventSourceArn : 
-#	     "arn:aws:dynamodb:us-east-1:642526210459:table/EXPAPP-FLAGS/stream/2024-05-29T12:23:09.994"
-        !GetAtt
-        - "EXPAPPFLAGS"
-        - "StreamArn"
-      FunctionName : !GetAtt NSRDSIMPORTSTATELAMBDA.Outputs.RSCID
-#      FunctionName : "arn:aws:lambda:us-east-1:642526210459:function:rdsImportState"

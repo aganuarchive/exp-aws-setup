@@ -1,0 +1,55 @@
+---
+Metadata:
+  TemplateId: "arn:aws:cloudformation:us-east-1:080349858544:generatedTemplate/e627b9c2-6389-46a9-a8c8-d1a3c5a6c466"
+Resources:
+  ApiGatewayStage00prod00dt2Wk:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::ApiGateway::Stage"
+    DeletionPolicy: "Retain"
+    Properties:
+      RestApiId: "qz6yxk5rac"
+      DeploymentId:
+        Fn::GetAtt:
+        - "ApiGatewayDeployment00bwwgnq00HiInq"
+        - "DeploymentId"
+      StageName: "prod"
+      CacheClusterSize: "0.5"
+      TracingEnabled: false
+      CacheClusterEnabled: false
+  ApiGatewayDeployment00bwwgnq00HiInq:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::ApiGateway::Deployment"
+    DeletionPolicy: "Retain"
+    Properties:
+      RestApiId: "qz6yxk5rac"
+  ApiGatewayRestApi004ufz9zqfsg00zVBe1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::ApiGateway::RestApi"
+    DeletionPolicy: "Retain"
+    Properties:
+      ApiKeySourceType: "HEADER"
+      EndpointConfiguration:
+        Types:
+        - "REGIONAL"
+      DisableExecuteApiEndpoint: false
+      Name: "testapi"
+  ApiGatewayDeployment004a3mv800ymSU7:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::ApiGateway::Deployment"
+    DeletionPolicy: "Retain"
+    Properties:
+      RestApiId: "qz6yxk5rac"
+  ApiGatewayStage00PROD00mKPgm:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::ApiGateway::Stage"
+    DeletionPolicy: "Retain"
+    Properties:
+      RestApiId: "qz6yxk5rac"
+      DeploymentId:
+        Fn::GetAtt:
+        - "ApiGatewayDeployment004a3mv800ymSU7"
+        - "DeploymentId"
+      StageName: "PROD"
+      CacheClusterSize: "0.5"
+      TracingEnabled: false
+      CacheClusterEnabled: false
