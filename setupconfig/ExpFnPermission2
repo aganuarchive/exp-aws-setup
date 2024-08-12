@@ -50,3 +50,10 @@ Resources :
       FunctionName : !ImportValue "EXP-PROCESSEMAIL-ARN"
       Principal : lambda.amazonaws.com
       SourceArn : !ImportValue "EXP-PROCESSCODEBUILD-ARN"
+  PARSEITEMLISTPERM : 
+    Type : AWS::Lambda::Permission
+    Properties:
+      Action : lambda:InvokeFunction
+      FunctionName : !ImportValue "EXP-parseItemList-ARN"
+      Principal : events.amazonaws.com
+      SourceArn : !ImportValue "EXP-EXPCARTITEMFILERULE-ARN"

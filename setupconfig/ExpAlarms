@@ -1,0 +1,29 @@
+#Make sure to use spaces and not tabs for indentation
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  NSTOPICEMAIL:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Transform:
+          Name: fnMacroS3
+      Parameters:
+        RSCKEY: "SNS-CB-EMAIL"
+        RSCTYPE: "NAME;ARN"
+  EXPLAMBDAERRORS:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName : "ExpLambdaErrors"
+      MetricName : "Errors"
+      ComparisonOperator : GreaterThanOrEqualToThreshold
+      DatapointsToAlarm : 1
+      Period : 60
+      Statistic : Sum
+      Namespace : "AWS/Lambda"
+      Threshold : 1
+      ActionsEnabled : True
+      EvaluationPeriods : 1
+      AlarmActions : 
+        #- "arn:aws:sns:us-east-1:637423170774:expcodebuildemail2"
+        - !GetAtt NSTOPICEMAIL.Outputs.RSCARN
+      

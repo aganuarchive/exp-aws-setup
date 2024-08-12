@@ -146,6 +146,25 @@ Resources:
       Targets:
         - Id : !ImportValue "EXP-PROCESSEMAIL-ID"
           Arn: !ImportValue "EXP-PROCESSEMAIL-ARN"
+  EXPCARTITEMFILERULE:
+    Type: AWS::Events::Rule
+    Properties:   
+      Name : "cartitemfile-process-rule"
+      RoleArn : !GetAtt NSEXPROLE.Outputs.RSCARN
+      EventBusName : "default"
+      EventPattern:
+        source:
+          - lambda_checkSMTransitions
+        detail-type:
+          - transition_event
+        detail :
+          evtype :
+            - "LAMBDA"
+          filetype :
+            - "CARTITEMFILE"
+      Targets:
+        - Id : !ImportValue "EXP-parseItemList-ID"
+          Arn: !ImportValue "EXP-parseItemList-ARN"
 Outputs:
       EXPFILEPROCESSRULEARN :
         Value : !GetAtt EXPFILEPROCESSRULE.Arn
@@ -159,6 +178,10 @@ Outputs:
         Value : !GetAtt EXPDUMPFILERULE.Arn
         Export : 
           Name : "EXP-EXPDUMPFILERULE-ARN"
+      EXPCARTITEMFILERULEARN :
+        Value : !GetAtt EXPCARTITEMFILERULE.Arn
+        Export : 
+          Name : "EXP-EXPCARTITEMFILERULE-ARN"
       EXPS3RULEARN :
         Value : !GetAtt EXPS3RULE.Arn
         Export : 
