@@ -68,6 +68,27 @@ Resources:
         SubnetIds :
           - !ImportValue "EXP-SUBNET1-ID"
           - !ImportValue "EXP-SUBNET2-ID"
+  exportItems:
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      FunctionName: exportItems
+      Role : !GetAtt NSEXPROLE.Outputs.RSCARN
+      Runtime: python3.9
+      Handler: lambda_exportItems.lambda_handler
+      Timeout : 300
+      Tags:
+        - Key: "ADDLAYERS"
+          Value: "exputils"
+      Code : 
+        ZipFile: |
+           def lambda_handler(event, context):
+             print('hello from exportItems')
+      VpcConfig :
+        SecurityGroupIds :
+          - !ImportValue "EXP-SG-LAMBDA-ID"
+        SubnetIds :
+          - !ImportValue "EXP-SUBNET1-ID"
+          - !ImportValue "EXP-SUBNET2-ID"
 Outputs:
       EXPRECENTITEMSARN :
         Value : !GetAtt recentShopItems.Arn
@@ -93,3 +114,11 @@ Outputs:
         Value : !Ref parseItemList
         Export : 
           Name : "EXP-parseItemList-ID"
+      EXPORTITEMSARN :
+        Value : !GetAtt exportItems.Arn
+        Export : 
+          Name : "EXP-exportItems-ARN"
+      EXPORTITEMSID :
+        Value : !Ref exportItems
+        Export : 
+          Name : "EXP-exportItems-ID"
